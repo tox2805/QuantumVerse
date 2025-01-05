@@ -8,7 +8,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
     overflow: hidden;
 }
 
@@ -39,7 +39,7 @@ body {
 .separator {
     border: none;
     border-top: 1px solid #bbb;
-    margin-top: 10%;           
+    margin-top: 15%;           
     margin-bottom: 15%;
     width: 80%;
 }

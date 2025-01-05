@@ -30,7 +30,7 @@ body {
 }
 
 .title h1 {
-    font-size: 5rem;
+    font-size: 4.5rem;
     margin: 0;
     line-height: 1.2; 
     word-wrap: break-word;
@@ -39,7 +39,7 @@ body {
 .separator {
     border: none;
     border-top: 1px solid #bbb;
-    margin-top: 15%;           
+    margin-top: 40%;           
     margin-bottom: 15%;
     width: 80%;
 }
@@ -53,17 +53,30 @@ body {
     width: 80%;
 }
 
+@media (min-height: 630px) { /* iphone X and above */
+    .separator1 {
+        margin-top: -10%;
+    }
+}
+
 @media (min-height: 810px) { /* iphone X and above */
     .separator1 {
-        width: 80%; /* Further adjust width for very short screens */
         margin-top: -28%;
+    }
+    .separator {
+        margin-top: 10%;
+    }
+    .title h1 {
+        font-size: 5rem;
     }
 }
 
 @media (min-height: 900px) { /* iphone 14 and taller phones */
     .separator1 {
-        width: 80%; /* Further adjust width for very short screens */
         margin-top: -50%;
+    }
+    .separator {
+        margin-top: -10%;
     }
 }
 

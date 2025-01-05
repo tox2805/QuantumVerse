@@ -13,4 +13,7 @@ def quantum_level():
     return render_template('quantumlevel.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.config['ENV'] = 'production'
+    app.config['DEBUG'] = False 
+    app.run()

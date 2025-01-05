@@ -13,6 +13,10 @@ def home():
 def quantum_level():
     return render_template('quantumlevel.html')
 
+@app.route('/quantumar')
+def quantumar():
+    return render_template('quantumar.html')
+
 app.config['ENV'] = 'production'
 app.config['DEBUG'] = False 
 

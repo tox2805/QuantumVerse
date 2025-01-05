@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
+    <script src="https://cdn.rawgit.com/jeromeetienne/ar.js/2.2.1/aframe/build/aframe-ar.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<a-scene embedded arjs>
+    <!-- Add your 3D model directly -->
+    <a-entity 
+        position="0 0 -2" 
+        rotation="0 45 0" 
+        scale="1 1 1" 
+        gltf-model="/static/models/sonic_dash_movie_sonic_with_animations.glb">
+    </a-entity>
+
+    <!-- Add a plain camera -->
+    <a-entity camera></a-entity>
+</a-scene>
+{% endblock %}

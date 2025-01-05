@@ -17,5 +17,5 @@ app.config['ENV'] = 'production'
 app.config['DEBUG'] = False 
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  # Get the port from environment or default to 5000
-    app.run(host='0.0.0.0', port=port)  # Bind to 0.0.0.0 for production deployment
+    # port = int(os.environ.get("PORT", 5000))  # Get the port from environment or default to 5000
+    app.run()  # Bind to 0.0.0.0 for production deployment

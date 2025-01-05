@@ -47,21 +47,21 @@ body {
 .separator1 {
     border: none;
     border-top: 1px solid #bbb;
-    margin-top: 15%;           
+    margin-top: 70%;           
     margin-bottom: 0%;
     margin-left: 20%;
     width: 80%;
 }
 
-@media (min-height: 630px) { /* iphone X and above */
+@media (min-height: 500px) { 
     .separator1 {
-        margin-top: -10%;
+        margin-top: 40%;
     }
 }
 
-@media (min-height: 810px) { /* iphone X and above */
+@media (min-height: 760px) { /* iphone X and above */
     .separator1 {
-        margin-top: -28%;
+        margin-top: 15%;
     }
     .separator {
         margin-top: 10%;
@@ -73,32 +73,43 @@ body {
 
 @media (min-height: 900px) { /* iphone 14 and taller phones */
     .separator1 {
-        margin-top: -50%;
+        margin-top: -0;
     }
     .separator {
         margin-top: -10%;
     }
 }
 
+/* Home descriotion */
 .description {
     font-size: 1.2rem;
     margin: 20px 0;
 }
 
+/* Qauntum level title */
 .description1 {
     text-align: right;
-    margin: 5%;
+    margin-right: 5%;
+    margin-top: 0;
     padding: 0;
-    font-size: 2.5rem;
+    font-size: 2rem;
     position: absolute;
     top: 5%;
     right: 0;
     width: 75%;
 }
 
+/* Quantum level ibm prompt */
 .description2 {
     font-size: 1rem;
+    margin-bottom: 10%;
     
+}
+
+@media (min-height: 810px) { /* bigger screens */
+    .description1 {
+        font-size: 2.5rem;
+    }
 }
 
 /* Button styles */
@@ -119,6 +130,23 @@ body {
     margin-top: 20%;
     margin-bottom: 0%;
 
+}
+
+.buttonIBM {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 0.8em;
+    text-decoration: none;
+    color: white;
+    background-color: transparent;
+    border: 4px solid #bbb;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    font-family: 'Fragment Mono', monospace;
+    margin-top: 0%;
+    margin-bottom: 0%;
 }
 
 /* moving gradient effect */
@@ -160,6 +188,10 @@ body {
     border-color: #007BFF;
 }
 
+.buttonIBM:hover {
+    background-color: #007BFF;
+    border-color: #007BFF;
+}
 
 
 /* Footer styles */

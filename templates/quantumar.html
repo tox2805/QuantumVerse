@@ -15,13 +15,14 @@
 {% endblock %}
 
 {% block content %}
-<a-scene embedded arjs>
+<a-scene embedded arjs="sourceType: webcam; cameraPosition: back;">
     <!-- Add your 3D model directly -->
     <a-entity 
-        position="0 0 -2" 
-        rotation="0 45 0" 
-        scale="1 1 1" 
-        gltf-model="/static/models/sonic_dash_movie_sonic_with_animations.glb">
+        position="0 -1 -7" 
+        rotation="0 0 0" 
+        scale="0.05 0.05 0.05"
+        gltf-model="/static/models/retro_computer_setup_free.glb"
+        animation="property: rotation; to: 0 360 0; loop: true; dur: 10000; easing: linear">
     </a-entity>
 
     <!-- Add a plain camera -->

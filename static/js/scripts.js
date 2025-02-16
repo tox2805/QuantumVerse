@@ -20,11 +20,10 @@ window.onload = function () {
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.screenSpacePanning = false;
-    controls.maxPolarAngle = Math.PI; // Full vertical rotation (no restrictions)
-    controls.minPolarAngle = 0;       // Prevent camera flipping below the model
-    controls.minDistance = 2;
-    controls.maxDistance = 15;
+    controls.enablePan = false;    // Prevents dragging the camera
+    controls.enableRotate = false; // Prevents two-finger rotation
+    controls.minDistance = 2;      // Minimum zoom distance
+    controls.maxDistance = 15;     // Maximum zoom distance
 
     // Load HDRI environment
     const hdrLoader = new THREE.RGBELoader();

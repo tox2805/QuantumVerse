@@ -363,6 +363,7 @@ window.onload = function () {
     
         closeButton.addEventListener("touchstart", (event) => {
             event.stopPropagation();
+            window.markersClickable = true;
             event.preventDefault();
             popup.remove();
             zoomOut();

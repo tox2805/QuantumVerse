@@ -91,6 +91,12 @@ export function showInstructionsPopup(controls, markersClickable) {
         controls.enabled = true; // Enable orbit controls
     });
 
+    closeButton.addEventListener("touchstart", () => {
+        popup.remove();
+        window.markersClickable = true;
+        controls.enabled = true; // Enable orbit controls
+    }, { passive: false });
+
     popup.appendChild(closeButton);
     document.body.appendChild(popup);
 

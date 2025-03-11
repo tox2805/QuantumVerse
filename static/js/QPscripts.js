@@ -34,7 +34,7 @@ window.onload = function () {
 
     // Load HDRI environment
     const hdrLoader = new THREE.RGBELoader();
-    hdrLoader.load('/static/textures/lonely_road_afternoon_puresky_4k.hdr', function (texture) {
+    hdrLoader.load('/static/textures/lonely_road_afternoon_puresky_1k.hdr', function (texture) {
         texture.mapping = THREE.EquirectangularReflectionMapping;
         scene.environment = texture;
         //scene.background = texture; // comment out to remove HDRI as background
@@ -46,7 +46,7 @@ window.onload = function () {
     // Load the model
     const loader = new THREE.GLTFLoader();
     loader.load(
-        '/static/models/Quantum_Processor.glb',
+        '/static/models/Quantum_Processor_decimated.glb',
         function (gltf) {
             const model = gltf.scene;
             model.scale.set(1, 1, 1);

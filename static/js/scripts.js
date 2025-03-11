@@ -83,7 +83,12 @@ window.onload = function () {
     showInstructionsPopup(controls, window.markersClickable);
     
     // Set inital camera position
-    camera.position.set(0, 2, -18);
+    if (window.innerWidth <= 768) {
+        camera.position.set(0, 2, -20);
+    } else {
+        camera.position.set(0, 2, -18);
+    }
+    //camera.position.set(0, 2, -18);
     const originalCameraPosition = new THREE.Vector3().copy(camera.position);
 
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -113,7 +118,7 @@ window.onload = function () {
     const markers = [
         { 
             position: new THREE.Vector3(0, -12, -6), 
-            annotation: "• The quantum processor is located at the bottom core of the machine. \n• Within this processor, **qubits** and **logic gates** perform quantum computations. \n• The temperature here is cooled to 15mK (-273.135°C) which is essential for reducing thermal noise that might affect computations. \n• **Fun fact**: 15mK is very close to absolute zero - the coldest possible temperature. This is colder than outer space!", 
+            annotation: "• Within the processor, **qubits** and **logic gates** perform quantum computations. \n• The temperature here is cooled to 15mK (-273°C) which is essential for reducing thermal noise that might affect computations. \n• **Fun fact**: 15mK is very close to absolute zero - the coldest possible temperature. This is colder than outer space!", 
             number: 1, 
             targetpos: new THREE.Vector3(0.1, -8.9, -2.8),
             title: "Quantum Processor",
@@ -129,7 +134,7 @@ window.onload = function () {
         },
         { 
             position: new THREE.Vector3(-4.5, -2, -7), 
-            annotation: "• Input lines carry precisely controlled microwave signals to the quantum processor \n• These signals manipulate the quantum state of qubits in the processor, effectively implementing **quantum logic gates**. \n• In superconducting quantum computers, logic gates are not fixed physical components, they are instead performed through these microwave pulses.", 
+            annotation: "• Input lines carry precisely controlled microwave signals to the quantum processor \n• These signals manipulate the quantum state of qubits in the processor to apply **quantum logic gates**.", 
             number: 5, 
             targetpos: new THREE.Vector3(-1, -1, -5),
             title: "Input Microwave Lines",
@@ -257,8 +262,6 @@ window.onload = function () {
                 const number = object.userData.number
 
                 showPopup(x, y, title, annotation, number);
-                window.markersClickable = false;  //cant click other markers now
-                controls.enabled = false; // Stop users moving the camera when focussed on marker
 
                 focusOnMarker(targetpos, cameraTargetPosition); // Zoom to the target position
             }
@@ -271,28 +274,34 @@ window.onload = function () {
         new TWEEN.Tween(camera.position)
             .to(cameraTargetPosition, 1000)
             .easing(TWEEN.Easing.Quadratic.Out)
+            .onComplete(() => {
+                // Adjust zoom limits after animation is complete
+                controls.minDistance = 2;
+                controls.maxDistance = 10;
+            })
             .start();
-
+    
         // Animate the controls target to focus on the targetpos
         new TWEEN.Tween(controls.target)
             .to(targetpos, 1000)
             .easing(TWEEN.Easing.Quadratic.Out)
             .start();
     }
-
+    
     function zoomOut() {
         // Animate the camera and controls target back to their original positions
+        controls.minDistance = 2;
+        controls.maxDistance = 20;
+
         new TWEEN.Tween(camera.position)
             .to(originalCameraPosition, 1000)
             .easing(TWEEN.Easing.Quadratic.Out)
             .start();
-
+    
         new TWEEN.Tween(controls.target)
             .to(originalControlsTarget, 1000)
             .easing(TWEEN.Easing.Quadratic.Out)
             .start();
-        
-        controls.enabled = true;
     }
 
     function showPopup(x, y, title, annotation, number) {
@@ -305,14 +314,14 @@ window.onload = function () {
         const popup = document.createElement("div");
         popup.className = "annotation-popup";
         popup.style.position = "absolute";
-        popup.style.background = "linear-gradient(135deg, #4a148c, #7b1fa2)";
+        popup.style.background = "linear-gradient(135deg, rgba(74, 20, 140, 0.9), rgba(123, 31, 162, 0.9))"; // Added transparency
         popup.style.padding = "15px";
         popup.style.border = "1px solid #ccc";
         popup.style.borderRadius = "10px";
         popup.style.boxShadow = "0 4px 15px rgba(0, 0, 0, 0.3)";
         popup.style.fontFamily = "Arial, sans-serif";
         popup.style.color = "#fff";
-        popup.style.opacity = "0";
+        popup.style.opacity = "0"; // For the fade-in transition
         popup.style.transition = "opacity 0.3s ease";
         popup.style.zIndex = "9999";
         popup.style.maxWidth = "300px"; // Increased width slightly
@@ -391,9 +400,15 @@ window.onload = function () {
         if (left < offset) left = offset;
         if (top < offset) top = offset;
         
-        if (number === 4){
-            popup.style.left = `${viewportWidth - 550}px`; // Right side with margin
-            popup.style.top = `${viewportHeight / 2 - 75}px`; // Centered vertically
+        if (number === 4 || number === 5 ){
+            if(window.innerWidth > 768){   //position marker 4 and 5 popup manually to not cover the important part.
+                popup.style.left = `${viewportWidth - 550}px`; // Right side with margin
+                popup.style.top = `${viewportHeight / 2 - 75}px`; // Centered vertically
+            }
+            else{
+                popup.style.left = `${left}px`;
+                popup.style.top = `${top+200}px`;
+            }
         }
         else {
             popup.style.left = `${left}px`;
@@ -405,7 +420,6 @@ window.onload = function () {
             popup.style.opacity = "1";
         }, 10);
     }
-    
 
     window.addEventListener("click", onPointerClick, false);
     window.addEventListener("touchstart", onPointerClick, { passive: false });

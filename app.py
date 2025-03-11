@@ -17,6 +17,10 @@ def quantum_level():
 def quantumar():
     return render_template('quantumar.html')
 
+@app.route('/quantumprocessor')
+def QProcessorAR():
+    return render_template('QProcessorAR.html')
+
 app.config['ENV'] = 'production'
 app.config['DEBUG'] = False 
 

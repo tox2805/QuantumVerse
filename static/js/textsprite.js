@@ -1,4 +1,4 @@
-export function createTextSprite(text, color = "white", size = 1) {
+export function createTextSprite(text, color = "white", size = 1, fontSize=125, strokeWidth=20) {
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
     const textureSize = 128; // Texture resolution
@@ -6,8 +6,6 @@ export function createTextSprite(text, color = "white", size = 1) {
     canvas.height = textureSize;
 
     // Set font and alignment
-    const fontSize = 125; // Font size
-    const strokeWidth = 13; // Stroke width
     context.font = `Bold ${fontSize}px Arial`;
     context.textAlign = "center"; // Center text horizontally
     context.textBaseline = "middle"; // Center text vertically

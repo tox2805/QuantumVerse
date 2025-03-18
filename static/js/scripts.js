@@ -118,7 +118,7 @@ window.onload = function () {
     const markers = [
         { 
             position: new THREE.Vector3(0, -12, -6), 
-            annotation: "• Within the processor, **qubits** and **logic gates** perform quantum computations. \n• The temperature here is cooled to 15mK (-273°C) which is essential for reducing thermal noise that might affect computations. \n• **Fun fact**: 15mK is very close to absolute zero - the coldest possible temperature. This is colder than outer space!", 
+            annotation: "• Within the processor, **qubits** and **quantum gates** perform quantum computations. \n• The temperature here is cooled to 15mK (-273°C) which is essential for reducing thermal noise that might affect computations. \n• **Fun fact**: 15mK is very close to absolute zero - the coldest possible temperature. This is colder than outer space!", 
             number: 1, 
             targetpos: new THREE.Vector3(0.1, -8.9, -2.8),
             title: "Quantum Processor",
@@ -150,7 +150,7 @@ window.onload = function () {
         },
         { 
             position: new THREE.Vector3(6, -3, -1), 
-            annotation: "• Superconducting coaxial lines transmit signals between the quantum amplifiers and qubit signal amplifiers. \n• Their superconducting properties help maintain the clarity of weak signals before further amplification", 
+            annotation: "• Superconducting coaxial lines transmit signals between the two stages of amplification. \n• Their superconducting properties help maintain the clarity of weak signals before further amplification", 
             number: 4, 
             targetpos: new THREE.Vector3(1, -3.5, -1),
             title: "Superconducting Coaxial Lines",
@@ -353,15 +353,29 @@ window.onload = function () {
     
         // Close button
         const closeButton = document.createElement("button");
-        closeButton.innerText = "×";
-        closeButton.style.position = "absolute";
-        closeButton.style.right = "5px";
-        closeButton.style.top = "5px";
-        closeButton.style.background = "none";
-        closeButton.style.border = "none";
-        closeButton.style.fontSize = "16px";
+        closeButton.innerText = "Close";
+        closeButton.style.display = "block";
+        closeButton.style.margin = "15px auto 0";
+        closeButton.style.padding = "5px 10px";
+        closeButton.style.background = "transparent";  // Transparent background initially
+        closeButton.style.color = "#fff";  // White text
+        closeButton.style.border = "3px solid #fff";  // White border
+        closeButton.style.borderRadius = "8px";
         closeButton.style.cursor = "pointer";
-        closeButton.style.color = "#fff";
+        closeButton.style.fontSize = "16px";
+        closeButton.style.fontWeight = "bold";
+        closeButton.style.transition = "background 0.3s ease, color 0.3s ease";  // Smooth transition
+    
+        // Hover effect
+        closeButton.addEventListener("mouseenter", () => {
+            closeButton.style.background = "#fff";  // White background on hover
+            closeButton.style.color = "#512da8";  // Purple text on hover (same as popup background)
+        });
+    
+        closeButton.addEventListener("mouseleave", () => {
+            closeButton.style.background = "transparent";  // Revert to transparent background
+            closeButton.style.color = "#fff";  // Revert to white text
+        });
     
         closeButton.addEventListener("click", (event) => {
             event.stopPropagation();

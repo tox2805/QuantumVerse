@@ -72,7 +72,6 @@ window.onload = function () {
 
             // Focus the OrbitControls target towards the bottom of the model
             const bottomPoint = new THREE.Vector3(center.x, bottom, center.z);
-
             controls.target.copy(bottomPoint);
             controls.update();
             originalControlsTarget.copy(bottomPoint);
@@ -89,7 +88,7 @@ window.onload = function () {
     if (window.innerWidth > 768) {
         camera.position.set(2, 0.2, -3);
     } else{
-        camera.position.set(3, 0, -3);
+        camera.position.set(3.5, 0, -2);
     }
 
     const originalCameraPosition = new THREE.Vector3().copy(camera.position);
@@ -121,19 +120,19 @@ window.onload = function () {
 
     const annotationSequence = [
         {
-            title: "Quantum processor",
-            annotation: "These qubits use superconducting circuits cooled to near absolute zero to maintain quantum states.",
-            nextCameraPosition: { x: 0.25, y: 0.9, z: -2.15 },
-            nextCameraTargetPosition: { x: 0.2, y: 0.89, z: -2.15 },
+            title: "Quantum Chip",
+            annotation: "This is the superconducting quantum chip within the quantum processor. \n This chip contains the qubits required for performing quantum operations.",
+            nextCameraPosition: { x: 0.4, y: 0.9, z: -2.175 },
+            nextCameraTargetPosition: { x: 0.2, y: 0.81, z: -2.175 },
             linesArray: [
                 { from: new THREE.Vector3(0, 0, 0), to: new THREE.Vector3(0, 0, 0) }
             ]
         },
         {
             title: "1: Qubits",
-            annotation: "Here's how qubits are arranged...",
+            annotation: "There are **five qubits** displayed here (labeled 1). \n On this chip, there are 280 total qubits, theoretically capable of 10^84 simultaneous computations. \n For context, the number of atoms in the observable universe is around 10^80.",
             nextCameraPosition: { x: 0.11, y: 0.92, z: -1.98 },
-            nextCameraTargetPosition: { x: 0.115, y: 0.88, z: -2.1},
+            nextCameraTargetPosition: { x: 0.12, y: 0.88, z: -2.1},
             linesArray: [
                 { from: new THREE.Vector3(0.1, 0.9, -2), to: new THREE.Vector3(0.1, 0.875, -2.13) }
             ]
@@ -141,32 +140,40 @@ window.onload = function () {
         },
         {
             title: "1: Qubit Materials",
-            annotation: "Each qubit is made from...",
-            nextCameraPosition: { x: 0.25, y: 0.9, z: -2.15 },
-            nextCameraTargetPosition: { x: 0.2, y: 0.89, z: -2.15 },
+            annotation: "Each qubit consists of two **capacitor pads** connected by a **Josephson Junction**. \n These components are both made from superconducting materials (such as aluminium).",
+            nextCameraPosition: { x: 0.4, y: 0.9, z: -2.175 },
+            nextCameraTargetPosition: { x: 0.2, y: 0.81, z: -2.175 },
             linesArray: [
                 { from: new THREE.Vector3(-0.7, 0.92, -1.1), to: new THREE.Vector3(0.1, 0.88, -2.13) }
             ]
         },
         {
             title: "2: Quantum Logic Gates",
-            annotation: "These gold lines represented with a '2' are resonators. Resonators carry microwave signals to the qubit to perform modify its state - acting as a quantum logic gate. They also do readouts on the qubit.",
-            nextCameraPosition: { x: 0.25, y: 0.9, z: -2.15 },
-            nextCameraTargetPosition: { x: 0.2, y: 0.89, z: -2.15 },
+            annotation: "These resonators (labeled 2) read out qubit states and apply **quantum logic gates**. \n They interact with qubits via microwave pulses to manipulate and measure quantum states.",
+            nextCameraPosition: { x: 0.4, y: 0.9, z: -2.175 },
+            nextCameraTargetPosition: { x: 0.2, y: 0.81, z: -2.175 },
             linesArray: [
                 { from: new THREE.Vector3(0.1, 0.9, -2), to: new THREE.Vector3(0.1, 0.88, -2.13) }
             ]
         },
         {
             title: "2: Entanglement",
-            annotation: "The resonators labeled here are responsible for connecting the qubits together - quantum coupling. This allows entanglement...",
-            nextCameraPosition: { x: 3, y: 0, z: -3 },
-            nextCameraTargetPosition: { x: 0.2, y: 0, z: -3 },
+            annotation: "The resonators labeled here enable quantum coupling between qubits. \n This allows **entanglement**, a key property for quantum computation. \n Resonators facilitate controlled interactions between qubits, enabling **multi-qubit** operations.",
+            nextCameraPosition: { x: 3.5, y: -0.5, z: -3 },
+            nextCameraTargetPosition: { x: 0.2, y: -0.5, z: -3 },
             linesArray: [
                 { from: new THREE.Vector3(0.1, 0.9, -2), to: new THREE.Vector3(0.1, 0.88, -2.13) }
             ]
         }
     ];
+
+    if (window.innerWidth > 768) {
+        const entanglementStep = annotationSequence.find(a => a.title === "2: Entanglement");
+        if (entanglementStep) {
+            entanglementStep.nextCameraPosition = { x: 2, y: 0.2, z: -3 };
+            entanglementStep.nextCameraTargetPosition = { x: 0, y: 0, z: -3 };
+        }
+    }
         
     function showPopupStep(stepIndex) {
         // Remove any existing popups
@@ -174,12 +181,14 @@ window.onload = function () {
         if (existingPopup) {
             existingPopup.remove();
         }
-    
+
+        const step = annotationSequence[stepIndex];
+
         if (stepIndex >= annotationSequence.length) {
             finalInstructions(); // No more steps, end sequence
+            return;
         }
     
-        const step = annotationSequence[stepIndex];
         showPopupStepWithCamera(step, stepIndex);
         // Show the popup first, but do NOT move the camera yet
         function showPopupStepWithCamera(step, stepIndex) {
@@ -220,7 +229,7 @@ window.onload = function () {
         const popup = document.createElement("div");
         popup.className = "annotation-popup";
         popup.style.position = "fixed"; 
-        popup.style.background = "linear-gradient(135deg, #4a148c, #7b1fa2)";
+        popup.style.background = "linear-gradient(135deg,rgba(74, 20, 140, 0.85), rgba(123, 31, 162, 0.85))";
         popup.style.padding = "15px";
         popup.style.border = "1px solid #ccc";
         popup.style.borderRadius = "10px";
@@ -231,16 +240,17 @@ window.onload = function () {
         popup.style.transition = "opacity 0.3s ease";
         popup.style.zIndex = "9999";
         popup.style.wordWrap = "break-word";
+        popup.style.maxHeight = "80vh";
     
         if (window.innerWidth > 768) {
             popup.style.width = "300px";
-            popup.style.height = "300px";
+            //popup.style.height = "300px";
             popup.style.left = "5%";
             popup.style.top = "50%";
             popup.style.transform = "translateY(-50%)";
         } else {
             popup.style.width = "80%";
-            popup.style.height = "120px";
+            //popup.style.height = "120px";
             popup.style.left = "50%";
             popup.style.bottom = "20px";
             popup.style.transform = "translateX(-50%)";
@@ -271,20 +281,29 @@ window.onload = function () {
         const nextButton = document.createElement("button");
         nextButton.innerText = stepIndex === annotationSequence.length - 1 ? "Finish" : "Next";
         nextButton.style.display = "block";
-        nextButton.style.margin = "0 auto";
-        nextButton.style.padding = "10px 20px";
-        nextButton.style.background = "#ff9800";
-        nextButton.style.border = "none";
-        nextButton.style.borderRadius = "5px";
-        nextButton.style.color = "#fff";
+        nextButton.style.margin = "15px auto 0";
+        nextButton.style.padding = "5px 10px";
+        nextButton.style.background = "transparent";  // Transparent background initially
+        nextButton.style.color = "#fff";  // White text
+        nextButton.style.border = "3px solid #fff";  // White border
+        nextButton.style.borderRadius = "8px";
         nextButton.style.cursor = "pointer";
-        nextButton.style.fontSize = "14px";
+        nextButton.style.fontSize = "16px";
+        nextButton.style.fontWeight = "bold";
+        nextButton.style.transition = "background 0.3s ease, color 0.3s ease";  // Smooth transition
+    
+        // Hover effect
+        nextButton.addEventListener("mouseenter", () => {
+            nextButton.style.background = "#fff";  // White background on hover
+            nextButton.style.color = "#512da8";  // Purple text on hover (same as popup background)
+        });
+    
+        nextButton.addEventListener("mouseleave", () => {
+            nextButton.style.background = "transparent";  // Revert to transparent background
+            nextButton.style.color = "#fff";  // Revert to white text
+        });
 
-        let lines = null; // Define line outside the condition
 
-        // if (window.innerWidth > 768) {
-        //     lines = drawLines(linesArray);  
-        // }
         let qubitTextSprites = null
         let logicGateTextSprites = null
         let entanglementTextSprites = null
@@ -295,9 +314,10 @@ window.onload = function () {
             qubitTextSprites = qubitsMarkers();
         }
 
-        // if (title === "1: Qubit Materials"){
-        //     lines = drawLines(linesArray);
-        // }
+        if ((title === "1: Qubit Materials") && window.innerWidth < 768){
+            popup.style.top = "20px";
+            popup.style.bottom = "";
+        }
 
         if (title === "2: Quantum Logic Gates"){
             logicGateTextSprites = logicGateMarkers();
@@ -345,11 +365,11 @@ window.onload = function () {
         }
     
         // You will set their positions manually like this:
-        textSprites[0].position.copy(new THREE.Vector3(0.1, 0.875, -2.13));  //left top
-        textSprites[1].position.copy(new THREE.Vector3(0.1, 0.854, -2.217));  //right top
-        textSprites[2].position.copy(new THREE.Vector3(0.1, 0.84, -2.172));  //middle
-        textSprites[3].position.copy(new THREE.Vector3(0.1, 0.8, -2.132));  //left bot
-        textSprites[4].position.copy(new THREE.Vector3(0.1, 0.821, -2.217));  //right bot
+        textSprites[0].position.copy(new THREE.Vector3(0.095, 0.875, -2.13));  //left top
+        textSprites[1].position.copy(new THREE.Vector3(0.095, 0.854, -2.217));  //right top
+        textSprites[2].position.copy(new THREE.Vector3(0.095, 0.835, -2.172));  //middle
+        textSprites[3].position.copy(new THREE.Vector3(0.095, 0.795, -2.132));  //left bot
+        textSprites[4].position.copy(new THREE.Vector3(0.095, 0.815, -2.22));  //right bot
 
         return textSprites;
     }
@@ -374,16 +394,15 @@ window.onload = function () {
         const textSprites = [];
     
         for (let i = 1; i <= 5; i++) {
-            const textSprite = createTextSprite("2", "white", 0.012);
+            const textSprite = createTextSprite("2", "white", 0.015);
             textSprites.push(textSprite);
             scene.add(textSprite);
         }
     
-        // You will set their positions manually like this:
-        textSprites[0].position.copy(new THREE.Vector3(0.1, 0.895, -2.135));  //left top
-        textSprites[1].position.copy(new THREE.Vector3(0.1, 0.885, -2.211));  //right top
-        textSprites[3].position.copy(new THREE.Vector3(0.1, 0.785, -2.14));  //left bot
-        textSprites[4].position.copy(new THREE.Vector3(0.1, 0.8, -2.217));  //right bot
+        textSprites[0].position.copy(new THREE.Vector3(0.095, 0.895, -2.135));  //left top
+        textSprites[1].position.copy(new THREE.Vector3(0.095, 0.885, -2.215));  //right top
+        textSprites[3].position.copy(new THREE.Vector3(0.095, 0.778, -2.14));  //left bot
+        textSprites[4].position.copy(new THREE.Vector3(0.095, 0.79, -2.218));  //right bot
 
         return textSprites;
     }
@@ -392,14 +411,13 @@ window.onload = function () {
         const textSprites = [];
     
         for (let i = 1; i <= 5; i++) {
-            const textSprite = createTextSprite("2", "white", 0.012);
+            const textSprite = createTextSprite("2", "white", 0.015);
             textSprites.push(textSprite);
             scene.add(textSprite);
         }
     
-        // You will set their positions manually like this:
-        textSprites[1].position.copy(new THREE.Vector3(0.1, 0.87, -2.175));  //right top
-        textSprites[4].position.copy(new THREE.Vector3(0.1, 0.81, -2.175));  //right bot
+        textSprites[1].position.copy(new THREE.Vector3(0.095, 0.87, -2.178)); //top
+        textSprites[4].position.copy(new THREE.Vector3(0.095, 0.795, -2.18));  //bot
 
         return textSprites;
     }
@@ -435,7 +453,7 @@ window.onload = function () {
         const scaleGroup = new THREE.Group();
         scaleGroup.add(verticalLine, topLine, bottomLine);
     
-        const textSprite = createTextSprite("2cm", "white", 0.2, 50, 10);
+        const textSprite = createTextSprite("2cm", "white", 0.25, 50, 10);
         textSprite.position.copy(new THREE.Vector3(0, 0, -4.35));
 
         scene.add(textSprite);

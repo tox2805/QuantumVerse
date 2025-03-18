@@ -126,6 +126,7 @@ export function showInstructionsPopup(controls, markersClickable, toolbarNotCrea
     }
     
     document.addEventListener("pointerdown", enableControls, { passive: false });
+    document.addEventListener("touchstart", enableControls, { passive: false });
 }
 
 function createToolBar(controls) {
@@ -205,7 +206,7 @@ export function finalInstructions() {
     const popup = document.createElement("div");
     popup.className = "annotation-popup";
     popup.style.position = "fixed";
-    popup.style.background = "linear-gradient(135deg, #4a148c, #7b1fa2)";
+    popup.style.background = "linear-gradient(135deg, rgba(74, 20, 140, 0.85), rgba(123, 31, 162, 0.85))";
     popup.style.padding = "15px";
     popup.style.border = "1px solid #ccc";
     popup.style.borderRadius = "10px";
@@ -219,20 +220,20 @@ export function finalInstructions() {
 
     if (window.innerWidth > 768) {
         popup.style.width = "300px";
-        popup.style.height = "300px";
+        //popup.style.height = "300px";
         popup.style.left = "5%";
         popup.style.top = "50%";
         popup.style.transform = "translateY(-50%)";
     } else {
         popup.style.width = "80%";
-        popup.style.height = "120px";
+        //popup.style.height = "120px";
         popup.style.left = "50%";
         popup.style.bottom = "20px";
         popup.style.transform = "translateX(-50%)";
     }
 
     const titleElement = document.createElement("div");
-    titleElement.innerText = "End of Quantum Processor Visualization";
+    titleElement.innerText = "You've finished!";
     titleElement.style.fontSize = "18px";
     titleElement.style.fontWeight = "bold";
     titleElement.style.textAlign = "center";
@@ -240,7 +241,7 @@ export function finalInstructions() {
     popup.appendChild(titleElement);
 
     const message = document.createElement("p");
-    message.innerText = "You have reached the end of the visualization sequence. Would you like to restart or return to the full quantum computer model?";
+    message.innerText = "You have reached the end of the visualisation. Would you like to restart or return to the full quantum computer model?";
     message.style.fontSize = "14px";
     message.style.textAlign = "center";
     message.style.marginBottom = "15px";

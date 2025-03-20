@@ -261,21 +261,23 @@ window.onload = function () {
                 const cameraTargetPosition = object.userData.cameraTargetPosition
                 const number = object.userData.number
 
-                showPopup(x, y, title, annotation, number);
-
-                focusOnMarker(targetpos, cameraTargetPosition); // Zoom to the target position
+                focusOnMarker(targetpos, cameraTargetPosition, x, y, title, annotation, number); // Zoom to the target position
             }
         }
     }
 
-    function focusOnMarker(targetpos, cameraTargetPosition) {
-
+    function focusOnMarker(targetpos, cameraTargetPosition, x, y, title, annotation, number) {
+        const existingPopup = document.querySelector(".annotation-popup");
+        if (existingPopup) {
+            existingPopup.remove();
+        }
         // Animate the camera to the specific position
         new TWEEN.Tween(camera.position)
             .to(cameraTargetPosition, 1000)
             .easing(TWEEN.Easing.Quadratic.Out)
             .onComplete(() => {
                 // Adjust zoom limits after animation is complete
+                showPopup(x, y, title, annotation, number);
                 controls.minDistance = 2;
                 controls.maxDistance = 10;
             })
@@ -305,12 +307,6 @@ window.onload = function () {
     }
 
     function showPopup(x, y, title, annotation, number) {
-        // Remove any existing popups
-        const existingPopup = document.querySelector(".annotation-popup");
-        if (existingPopup) {
-            existingPopup.remove();
-        }
-
         const popup = document.createElement("div");
         popup.className = "annotation-popup";
         popup.style.position = "absolute";
@@ -322,7 +318,7 @@ window.onload = function () {
         popup.style.fontFamily = "Arial, sans-serif";
         popup.style.color = "#fff";
         popup.style.opacity = "0"; // For the fade-in transition
-        popup.style.transition = "opacity 0.3s ease";
+        popup.style.transition = "opacity 0.2s ease";
         popup.style.zIndex = "9999";
         popup.style.maxWidth = "300px"; // Increased width slightly
         popup.style.wordWrap = "break-word";
@@ -413,22 +409,31 @@ window.onload = function () {
         }
         if (left < offset) left = offset;
         if (top < offset) top = offset;
-        
-        if (number === 4 || number === 5 ){
-            if(window.innerWidth > 768){   //position marker 4 and 5 popup manually to not cover the important part.
-                popup.style.left = `${viewportWidth - 550}px`; // Right side with margin
-                popup.style.top = `${viewportHeight / 2 - 75}px`; // Centered vertically
-            }
-            else{
+                
+        if (window.innerWidth > 768) { 
+            if (number === 4 || number === 5) {
+                // Place on the right side, leaving a margin
+                const rightMargin = 200;
+                popup.style.left = `${viewportWidth - popupRect.width - rightMargin}px`;
+                popup.style.top = `${(viewportHeight - popupRect.height) / 2}px`; // vertically center
+            } 
+            else if (number === 3) {
+                // Place on the left side with a margin
+                const leftMargin = 200;
+                popup.style.left = `${leftMargin}px`;
+                popup.style.top = `${(viewportHeight - popupRect.height) / 2}px`; // vertically center
+            } 
+            else {
                 popup.style.left = `${left}px`;
-                popup.style.top = `${top+200}px`;
+                popup.style.top = `${top}px`;
             }
-        }
-        else {
+        } else {
+            // Mobile positioning: stick near the bottom with a small margin
+            const smallMargin = 10;
+            const popupHeight = popupRect.height;
             popup.style.left = `${left}px`;
-            popup.style.top = `${top}px`;
+            popup.style.top = `${viewportHeight - popupHeight - smallMargin}px`;
         }
-    
         // Fade in effect
         setTimeout(() => {
             popup.style.opacity = "1";

@@ -100,6 +100,17 @@ export function showInstructionsPopup(controls, markersClickable, toolbarNotCrea
             createToolBar(controls);
         }
     });
+
+    closeButton.addEventListener("touchstart", () => {
+        closeButtonClicked = true; // Set the flag when close button is clicked
+        popup.style.opacity = "0";
+        setTimeout(() => popup.remove(), 500);
+        controls.enabled = true;
+        window.markersClickable = true;
+        if (toolbarNotCreated){
+            createToolBar(controls);
+        }
+    });
     
     popup.appendChild(closeButton);
     document.body.appendChild(popup);
@@ -126,7 +137,6 @@ export function showInstructionsPopup(controls, markersClickable, toolbarNotCrea
     }
     
     document.addEventListener("pointerdown", enableControls, { passive: false });
-    document.addEventListener("touchstart", enableControls, { passive: false });
 }
 
 function createToolBar(controls) {

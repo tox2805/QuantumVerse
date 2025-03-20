@@ -91,8 +91,6 @@ window.onload = function () {
         camera.position.set(3.5, 0, -2);
     }
 
-    const originalCameraPosition = new THREE.Vector3().copy(camera.position);
-
     addScaleIndicator(scene, 2, { x: 0, y: 0, z: -4.2 });
 
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -159,8 +157,8 @@ window.onload = function () {
         {
             title: "2: Entanglement",
             annotation: "The resonators labeled here enable quantum coupling between qubits. \n This allows **entanglement**, a key property for quantum computation. \n Resonators facilitate controlled interactions between qubits, enabling **multi-qubit** operations.",
-            nextCameraPosition: { x: 3.5, y: -0.5, z: -3 },
-            nextCameraTargetPosition: { x: 0.2, y: -0.5, z: -3 },
+            nextCameraPosition: { x: 3.5, y: -0.5, z: -2 },
+            nextCameraTargetPosition: { x: 0, y: -0.5, z: -3 },
             linesArray: [
                 { from: new THREE.Vector3(0.1, 0.9, -2), to: new THREE.Vector3(0.1, 0.88, -2.13) }
             ]
@@ -372,22 +370,6 @@ window.onload = function () {
         textSprites[4].position.copy(new THREE.Vector3(0.095, 0.815, -2.22));  //right bot
 
         return textSprites;
-    }
-    
-
-    function drawLines(linesArray) {
-        const lines = []; // Array to store line objects
-    
-        linesArray.forEach(({ from, to }) => {
-            const geometry = new THREE.BufferGeometry().setFromPoints([from, to]);
-            const material = new THREE.LineBasicMaterial({ color: 0xff0000 });
-            const line = new THREE.Line(geometry, material);
-    
-            scene.add(line);
-            lines.push(line); // Store the created line
-        });
-    
-        return lines; // Return all the drawn lines
     }
 
     function logicGateMarkers() {

@@ -53,7 +53,13 @@ body {
     width: 80%;
 }
 
-@media (min-height: 500px) { 
+@media (min-height: 570px) { 
+    .separator1 {
+        margin-top: 30%;
+    }
+}
+
+@media (min-height: 650px) { 
     .separator1 {
         margin-top: 15%;
     }

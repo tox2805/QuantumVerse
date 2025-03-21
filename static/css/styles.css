@@ -208,13 +208,13 @@ body {
     .title h1 {
         font-size: 6rem;
         word-wrap: normal;
-        text-align: center;  /* Center the text */
+        text-align: center;
         margin: 0;
         padding: 0;
         position: absolute;
         top: 5%;
-        left: 50%;  /* Move the text to the center horizontally */
-        transform: translateX(-50%);  /* Perfectly center the text */
+        left: 50%;
+        transform: translateX(-50%);
         width: auto;
     }
     .description {

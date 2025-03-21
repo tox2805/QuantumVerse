@@ -363,11 +363,11 @@ window.onload = function () {
         }
     
         // You will set their positions manually like this:
-        textSprites[0].position.copy(new THREE.Vector3(0.095, 0.875, -2.13));  //left top
-        textSprites[1].position.copy(new THREE.Vector3(0.095, 0.854, -2.217));  //right top
-        textSprites[2].position.copy(new THREE.Vector3(0.095, 0.835, -2.172));  //middle
-        textSprites[3].position.copy(new THREE.Vector3(0.095, 0.795, -2.132));  //left bot
-        textSprites[4].position.copy(new THREE.Vector3(0.095, 0.815, -2.22));  //right bot
+        textSprites[0].position.copy(new THREE.Vector3(0.09, 0.875, -2.13));  //left top
+        textSprites[1].position.copy(new THREE.Vector3(0.09, 0.854, -2.217));  //right top
+        textSprites[2].position.copy(new THREE.Vector3(0.09, 0.835, -2.172));  //middle
+        textSprites[3].position.copy(new THREE.Vector3(0.09, 0.795, -2.132));  //left bot
+        textSprites[4].position.copy(new THREE.Vector3(0.09, 0.815, -2.22));  //right bot
 
         return textSprites;
     }
@@ -381,10 +381,10 @@ window.onload = function () {
             scene.add(textSprite);
         }
     
-        textSprites[0].position.copy(new THREE.Vector3(0.095, 0.895, -2.135));  //left top
-        textSprites[1].position.copy(new THREE.Vector3(0.095, 0.885, -2.215));  //right top
-        textSprites[3].position.copy(new THREE.Vector3(0.095, 0.778, -2.14));  //left bot
-        textSprites[4].position.copy(new THREE.Vector3(0.095, 0.79, -2.218));  //right bot
+        textSprites[0].position.copy(new THREE.Vector3(0.08, 0.895, -2.135));  //left top
+        textSprites[1].position.copy(new THREE.Vector3(0.08, 0.885, -2.215));  //right top
+        textSprites[3].position.copy(new THREE.Vector3(0.085, 0.773, -2.14));  //left bot
+        textSprites[4].position.copy(new THREE.Vector3(0.08, 0.79, -2.218));  //right bot
 
         return textSprites;
     }
@@ -398,8 +398,8 @@ window.onload = function () {
             scene.add(textSprite);
         }
     
-        textSprites[1].position.copy(new THREE.Vector3(0.095, 0.87, -2.178)); //top
-        textSprites[4].position.copy(new THREE.Vector3(0.095, 0.795, -2.18));  //bot
+        textSprites[1].position.copy(new THREE.Vector3(0.08, 0.87, -2.178)); //top
+        textSprites[4].position.copy(new THREE.Vector3(0.08, 0.795, -2.18));  //bot
 
         return textSprites;
     }

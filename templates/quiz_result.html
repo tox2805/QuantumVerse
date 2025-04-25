@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-results">
+    <h1>Results</h1>
+    <p>You scored {{ score }} out of {{ total }}.</p>
+
+    <div class="results-wrapper">
+        {% for q in questions %}
+        <div class="results-block">
+            <h3>Q{{ loop.index }}: {{ q.question }}</h3>
+            <p>Your answer: <strong>{{ answers[q.id|string] }}</strong></p>
+            <p>Correct answer: <strong>{{ q.correct_answer }}</strong></p>
+
+            <button class="explain-btn"
+                data-question="{{ q.question }}"
+                data-answer="{{ q.correct_answer }}"
+                data-myanswer="{{ answers[q.id|string] }}"
+                data-target="explanation-{{ loop.index }}">
+                Give explanation
+            </button>
+
+            <div id="explanation-{{ loop.index }}" style="margin-top: 10px; color: #fff;"></div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.explain-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            console.log('triggered');
+            const question = btn.getAttribute('data-question');
+            const correctAnswer = btn.getAttribute('data-answer')
+            const myAnswer = btn.getAttribute('data-myanswer');;
+            const targetId = btn.getAttribute('data-target');
+            const target = document.getElementById(targetId);
+
+            target.innerHTML = `
+                <div class="granite-explanation-box">
+                    <p class="granite-title">Explanation from IBM Granite</p>
+                    <p class="granite-loading">Loading explanation...</p>
+                </div>
+            `;
+            fetch('/explain', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ question, correct_answer: correctAnswer, my_answer: myAnswer })
+            })
+            .then(res => res.json())
+            .then(data => {
+                target.innerHTML = `
+                    <div class="granite-explanation-box">
+                        <p class="granite-title">Explanation from IBM Granite</p>
+                        <p class="granite-content">${data.explanation || 'No explanation returned.'}</p>
+                    </div>
+                `;
+            })
+            .catch(err => {
+                target.innerHTML = 'Error fetching explanation.';
+                console.error(err);
+            });
+        });
+    });
+});
+</script>
+{% endblock %}
+

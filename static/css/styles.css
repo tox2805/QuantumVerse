@@ -53,9 +53,15 @@ body {
     width: 80%;
 }
 
-@media (min-height: 500px) { 
+@media (min-height: 570px) { 
     .separator1 {
-        margin-top: 40%;
+        margin-top: 30%;
+    }
+}
+
+@media (min-height: 650px) { 
+    .separator1 {
+        margin-top: 15%;
     }
 }
 
@@ -73,7 +79,7 @@ body {
 
 @media (min-height: 900px) { /* iphone 14 and taller phones */
     .separator1 {
-        margin-top: -0;
+        margin-top: -10%;
     }
     .separator {
         margin-top: -10%;
@@ -103,7 +109,12 @@ body {
 .description2 {
     font-size: 1rem;
     margin-bottom: 10%;
-    
+}
+
+.description3 {
+    font-size: 1rem;
+    margin-bottom: 5%;
+    margin-top: 10%;
 }
 
 @media (min-height: 810px) { /* bigger screens */
@@ -119,17 +130,16 @@ body {
     font-size: 1.2rem;
     text-decoration: none;
     color: white;
-    background-color: transparent;
-    border: 4px solid #bbb;
+    background: linear-gradient(135deg, rgba(149, 117, 205, 1), rgba(186, 104, 200, 1)); 
+    border: 2px solid #ffffff;
     border-radius: 8px;
     position: relative;
     overflow: hidden;
-    transition: color 0.3s ease;
+    transition: color 0.3s ease, border-color 0.3s ease;
     cursor: pointer;
     font-family: 'Fragment Mono', monospace;
     margin-top: 20%;
     margin-bottom: 0%;
-
 }
 
 .buttonIBM {
@@ -149,43 +159,29 @@ body {
     margin-bottom: 0%;
 }
 
-/* moving gradient effect */
-.button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(45deg, 
-        rgb(22, 12, 40),    
-        rgb(46, 134, 171),  
-        rgb(0, 59, 54),     
-        rgb(169, 221, 214), 
-        rgb(193, 184, 200)  
-    );
-    background-size: 400% 400%;
-    animation: gradientAnimation 5s ease infinite;
-    z-index: -1;
+.buttonIBM2 {
+    display: inline-block;
+    padding: 12px 24px;
+    font-size: 0.8rem;
+    text-decoration: none;
+    color: white;
+    background: linear-gradient(135deg, rgba(149, 117, 205, 1), rgba(186, 104, 200, 1)); 
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+    font-family: 'Fragment Mono', monospace;
+    margin-top: 5%;
+    margin-bottom: 0%;
 }
 
-/* Animation for the moving gradient */
-@keyframes gradientAnimation {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-/* Hover effect for button */
 .button:hover {
-    color: black;
-    border-color: #007BFF;
+    background: white;
+    color: rgba(74, 20, 140, 1);
+    border-color: white;
+    transform: scale(1.05);
 }
 
 .buttonIBM:hover {
@@ -193,6 +189,76 @@ body {
     border-color: #007BFF;
 }
 
+.buttonIBM2:hover {
+    background: white;
+    color: rgba(74, 20, 140, 1);
+    border-color: white;
+    transform: scale(1.05);
+}
+
+/* For typical laptop sizes (1366px wide and above) */
+@media (min-width: 1000px) {
+    .separator {
+        margin-top: 5%;
+        margin-bottom: 0%;
+        width: 35%;
+    }
+    .separator1 {
+        margin-top: 6%;
+        width: 60%;
+        margin-bottom: 7%;
+    }
+    .title{
+        margin: 0;
+    }
+    .title h1 {
+        font-size: 6rem;
+        word-wrap: normal;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+        position: absolute;
+        top: 5%;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto;
+    }
+    .description {
+        font-size: 1.2rem;
+        margin: 0;
+        margin-top: 5%;
+    }
+    .button {
+        margin-top: 8%;
+        margin-bottom: 0%;
+    }
+    .description1 {
+        text-align: center;
+        margin-right: 0;
+        margin-top: 0;
+        font-size: 3rem;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50%;
+    }
+    .description2 {
+        margin-bottom: 2%;
+        margin-top: 6%;
+    }
+    .buttonIBM {
+        margin-top: 0%;
+        margin-bottom: 0%;
+    }
+    .description3 {
+        margin-bottom: 2%;
+        margin-top: 6%;
+    }
+    .buttonIBM2 {
+        margin-top: 0%;
+        margin-bottom: 0%;
+    }
+}
 
 /* Footer styles */
 .footer {
@@ -200,7 +266,172 @@ body {
     color: #bbb;
     margin-top: 0px;
     position: absolute;
-    right: 2%;
+    right: 0%;
     bottom: 5%;
     width: 100%;
+}
+
+/* Quiz and results page styles */
+.title-quiz {
+    margin: 0%;
+    font-size: 2rem;
+    padding: 0;
+    position: absolute;
+    top: 5%;
+    right: 0;
+    width: 100%;
+}
+
+.granite-explanation-box {
+    background: linear-gradient(135deg, rgba(74, 20, 140, 0.85), rgba(123, 31, 162, 0.85));
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    box-shadow: 0 0 8px rgba(0,0,0,0.2);
+    font-family: sans-serif;
+    width: 80%;
+    margin: 1rem auto;
+    text-align: left;
+}
+
+.granite-title {
+    font-weight: bold;
+    text-decoration: underline;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    text-align: center;
+
+}
+
+.granite-loading {
+    color: white;
+    font-style: italic;
+}
+
+.explain-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 0.85rem;
+    text-decoration: none;
+    color: white;
+    background: linear-gradient(135deg, rgba(149, 117, 205, 1), rgba(186, 104, 200, 1)); 
+    border: 2px solid #ffffff;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+    font-family: 'Fragment Mono', monospace;
+    margin-top: 1%;
+    margin-bottom: 0%;
+}
+
+.explain-btn:hover {
+    background: white;
+    color: rgba(74, 20, 140, 1);
+    border-color: white;
+    transform: scale(1.05);
+}
+
+.container-results {
+    padding: 2rem;
+    max-width: 800px;
+    margin: auto;
+    color: white;
+}
+
+.results-wrapper {
+    margin-top: 2rem;
+    max-height: 70vh;
+    overflow-y: auto;
+    padding-right: 1rem;
+}
+
+.question-block {
+    background-color: #222;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    margin-top: 40%;
+}
+
+.results-block {
+    background-color: #222;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+}
+
+/* laptop screens */
+@media (min-width: 1024px) {
+    .question-block {
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top:-5%
+    }
+}
+
+@media (min-width: 1024px) {
+    .results-block {
+        width: 70%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+
+.reset-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    text-decoration: none;
+    background-color: #444;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: bold;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+    transition: background-color 0.3s;
+    margin-bottom: 1%;
+}
+
+.reset-button:hover {
+    background-color: #666;
+}
+
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background-color: #1c1c1c;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 1rem;
+    color: #eee;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    position: relative;
+}
+
+.radio-option:hover {
+    background-color: #2a2a2a;
+}
+
+.radio-option input[type="radio"] {
+    accent-color: #4caf50;
+    width: 18px;
+    height: 18px;
 }

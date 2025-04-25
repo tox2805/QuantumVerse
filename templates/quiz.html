@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<a href="{{ url_for('reset_quiz') }}" class="reset-button">⟵ Reset Quiz</a>
+
+<div class="container">
+    <div class="title-quiz">
+        <h1>Quiz</h1>
+    </div>
+
+    <form method="POST">
+        <div class="question-block">
+            <h3>Q{{ index }} of {{ total }}: {{ question.question }}</h3>
+            {% set options = question.choices.split(',') %}
+            <div class="radio-group">
+                {% for choice in options %}
+                    <label class="radio-option">
+                        <input type="radio" id="q_{{ loop.index }}" name="answer" value="{{ choice.strip() }}"
+                            {% if selected_answer == choice.strip() %}checked{% endif %} required>
+                        <span class="custom-radio"></span>
+                        {{ choice.strip() }}
+                    </label>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="navigation-buttons">
+            {% if not is_first %}
+                <button class="explain-btn" type="submit" name="prev">Previous</button>
+            {% endif %}
+            {% if not is_last %}
+                <button class="explain-btn" type="submit" name="next">Next</button>
+            {% else %}
+                <button class="explain-btn" type="submit" name="submit">Submit</button>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock %}

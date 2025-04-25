@@ -20,7 +20,7 @@ export function showInstructionsPopup(controls, markersClickable, toolbarNotCrea
 
     if (window.innerWidth > 768) {
         popup.style.left = "2%";
-        popup.style.top = "10%";
+        popup.style.top = "15%";
     } else {
         popup.style.left = "50%";
         popup.style.top = "40%";
@@ -140,40 +140,52 @@ export function showInstructionsPopup(controls, markersClickable, toolbarNotCrea
 }
 
 function createToolBar(controls) {
-    // Create the toolbar container
+    // Create a container to hold both the title and the toolbar
+    const toolbarWrapper = document.createElement("div");
+    toolbarWrapper.style.position = "fixed";
+    toolbarWrapper.style.top = "20px";
+    toolbarWrapper.style.left = "20px";
+    toolbarWrapper.style.zIndex = "10000";
+    toolbarWrapper.style.display = "flex";
+    toolbarWrapper.style.flexDirection = "column";
+    toolbarWrapper.style.alignItems = "flex-start";
+    toolbarWrapper.style.gap = "10px";
+
+    // Create the title element (aligned above the buttons)
+    const title = document.createElement("div");
+    title.innerText = "IBM Superconducting Quantum Computer";
+    title.style.fontSize = "1rem";
+    title.style.fontWeight = "600";
+    title.style.color = "white";
+    title.style.background = "#3e2280";
+    title.style.padding = "6px 12px";
+    title.style.borderRadius = "8px";
+
+    // Create the toolbar row
     const toolbar = document.createElement("div");
-    toolbar.style.position = "fixed";
-    toolbar.style.left = "20px";
-    toolbar.style.zIndex = "10000"; // Ensure the toolbar is on top
     toolbar.style.display = "flex";
     toolbar.style.flexDirection = "row";
-    toolbar.style.alignItems = "flex-start";
-    toolbar.style.gap = "10px"; // Space between buttons
+    toolbar.style.gap = "10px";
 
-    // Function to create a button with common styles
     const createButton = (text, onClickHandler) => {
         const button = document.createElement("button");
         button.innerText = text;
         button.style.background = "#512da8";
         button.style.color = "#fff";
         button.style.border = "none";
-        button.style.borderRadius = text === "?" ? "20%" : "8px"; // Conditional border radius
+        button.style.borderRadius = text === "?" ? "20%" : "8px";
         button.style.cursor = "pointer";
         button.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.3)";
         button.style.transition = "background 0.3s ease";
 
-        // Adjust button size based on screen width
         if (window.innerWidth <= 768) {
-            button.style.padding = "6px 12px"; // Smaller padding for mobile
-            button.style.fontSize = "14px"; // Smaller font size for mobile
-            toolbar.style.top = "10px";
+            button.style.padding = "6px 12px";
+            button.style.fontSize = "14px";
         } else {
-            button.style.padding = text === "?" ? "10px 20px" : "12px 20px"; // Default padding
-            button.style.fontSize = "16px"; // Default font size
-            toolbar.style.top = "20px";
+            button.style.padding = text === "?" ? "10px 20px" : "12px 20px";
+            button.style.fontSize = "16px";
         }
 
-        // Hover effects
         button.addEventListener("mouseover", () => {
             button.style.background = "#673ab7";
         });
@@ -182,29 +194,34 @@ function createToolBar(controls) {
             button.style.background = "#512da8";
         });
 
-        // Click/touch event
         button.addEventListener("click", onClickHandler);
         button.addEventListener("touchstart", onClickHandler);
 
         return button;
     };
 
-    // Create the help button (?)
+    // Help button
     const helpButton = createButton("?", () => {
-        showInstructionsPopup(controls, true, false); // Show instructions popup
+        showInstructionsPopup(controls, true, false);
     });
 
-    // Create the "click to explore" button
-    const exploreButton = createButton("Explore Quantum Processor", () => {
-        window.location.href = "/quantumprocessor"; // Navigate to quantum processor page
+    // Next section button
+    const exploreButton = createButton("Go To Quantum Processor", () => {
+        window.location.href = "/quantumprocessor";
     });
 
-    // Append both buttons to the toolbar
+    // Add buttons to the toolbar row
     toolbar.appendChild(helpButton);
     toolbar.appendChild(exploreButton);
 
-    // Append toolbar to the body
-    document.body.appendChild(toolbar);
+    // Add the title and toolbar to the wrapper
+    if (window.innerWidth >= 768) {
+        toolbarWrapper.appendChild(title);
+    }
+    toolbarWrapper.appendChild(toolbar);
+
+    // Add everything to the document
+    document.body.appendChild(toolbarWrapper);
 }
 
 export function finalInstructions() {

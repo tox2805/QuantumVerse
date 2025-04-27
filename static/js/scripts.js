@@ -115,7 +115,6 @@ window.onload = function () {
     const mouse = new THREE.Vector2();
 
     // marker data for clickable coordinates
-    console.log(annotationsData);
     const markers = [
         { 
             position: new THREE.Vector3(0, -12, -6), 

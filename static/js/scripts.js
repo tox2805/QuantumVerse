@@ -115,10 +115,11 @@ window.onload = function () {
     const mouse = new THREE.Vector2();
 
     // marker data for clickable coordinates
+    console.log(annotationsData);
     const markers = [
         { 
             position: new THREE.Vector3(0, -12, -6), 
-            annotation: "• Within the processor, **qubits** and **quantum gates** perform quantum computations. \n• The temperature here is cooled to 15mK (-273°C) which is essential for reducing thermal noise that might affect computations. \n• **Fun fact**: 15mK is very close to absolute zero - the coldest possible temperature. This is colder than outer space!", 
+            annotation: annotationsData[0].annotation,
             number: 1, 
             targetpos: new THREE.Vector3(0.1, -8.9, -2.8),
             title: "Quantum Processor",
@@ -126,7 +127,7 @@ window.onload = function () {
         },
         { 
             position: new THREE.Vector3(5, -9, -3), 
-            annotation: "• Quantum amplifiers capture and amplify the readout signals from the quantum processor. \n• When qubits are operated on and measured by the processor, they emit very weak **microwave signals** which need to be amplified so they can be processed by other components.", 
+            annotation: annotationsData[1].annotation,
             number: 2, 
             targetpos: new THREE.Vector3(1.5, -9.5, -4),
             title: "Quantum Amplifiers",
@@ -134,7 +135,7 @@ window.onload = function () {
         },
         { 
             position: new THREE.Vector3(-4.5, -2, -7), 
-            annotation: "• Input lines carry precisely controlled microwave signals to the quantum processor \n• These signals manipulate the quantum state of qubits in the processor to apply **quantum logic gates**.", 
+            annotation: annotationsData[4].annotation,
             number: 5, 
             targetpos: new THREE.Vector3(-1, -1, -5),
             title: "Input Microwave Lines",
@@ -142,7 +143,7 @@ window.onload = function () {
         },
         { 
             position: new THREE.Vector3(6, 0, -3), 
-            annotation: "• Qubit signal amplifiers further amplify the already-boosted signals from quantum amplifiers. \n• These amplifiers ensure that the signals are strong enough for external components to digitise and analyse them.", 
+            annotation: annotationsData[2].annotation,
             number: 3, 
             targetpos: new THREE.Vector3(3, 0, -3),
             title: "Qubit Signal Amplifiers",
@@ -150,7 +151,7 @@ window.onload = function () {
         },
         { 
             position: new THREE.Vector3(6, -3, -1), 
-            annotation: "• Superconducting coaxial lines transmit signals between the two stages of amplification. \n• Their superconducting properties help maintain the clarity of weak signals before further amplification", 
+            annotation: annotationsData[3].annotation,
             number: 4, 
             targetpos: new THREE.Vector3(1, -3.5, -1),
             title: "Superconducting Coaxial Lines",
@@ -158,7 +159,7 @@ window.onload = function () {
         },
         { 
             position: new THREE.Vector3(-4.5, -6, -4), 
-            annotation: "• The mixing chamber provides the necessary amount of cooling power to bring the quantum processor and associated components down to a temperature of 15 mK.", 
+            annotation: annotationsData[5].annotation,
             number: 6, 
             targetpos: new THREE.Vector3(0, -8, -3),
             title: "Mixing Chamber",
@@ -166,7 +167,7 @@ window.onload = function () {
         },
         { 
             position: new THREE.Vector3(0, 2, -2), 
-            annotation: "Other components are located outside the cryogenic environment such as microwave signal generators and digitisers. \n• **Microwave signal generators** produce the control signals used to manipulate qubits. \n• **Digitisers** convert the qubit output signals into digital data for further analysis. \n• These components enable classical electronics to control qubits and determine their states after computations.", 
+            annotation: annotationsData[6].annotation,
             number: 7, 
             targetpos: new THREE.Vector3(0, 1, -3),
             title: "External Components",
@@ -176,29 +177,26 @@ window.onload = function () {
 
     const markerObjects = [];
     markers.forEach((marker, index) => {
-        // Create a semi-transparent sphere for the marker
         const sphereGeometry = new THREE.SphereGeometry(0.3, 16, 16);
         const sphereMaterial = new THREE.MeshBasicMaterial({ 
-            color: 0x522b99, // Purple fill
+            color: 0x522b99,
             transparent: true,
-            opacity: 0.9 // Adjust for visibility
+            opacity: 0.9
         });
         const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
         sphere.position.copy(marker.position);
         sphere.userData.annotation = marker.annotation;
-        sphere.userData.title = marker.title; // Add title to userData
-        sphere.userData.targetpos = marker.targetpos; // Add targetpos to userData
+        sphere.userData.title = marker.title;
+        sphere.userData.targetpos = marker.targetpos;
         sphere.userData.isMarker = true;
         sphere.userData.cameraTargetPosition = marker.cameraTargetPosition;
         sphere.userData.number = marker.number;
 
 
-        // Create a text sprite for the number
         const textSprite = createTextSprite(marker.number.toString(), "white", 0.6);
         textSprite.position.copy(marker.position);
-        textSprite.position.y += 0.5; // Offset above the sphere
+        textSprite.position.y += 0.5;
 
-        // Add both the sphere and text to the scene
         scene.add(sphere);
         scene.add(textSprite);
         markerObjects.push(sphere);
@@ -215,7 +213,6 @@ window.onload = function () {
         scene.add(line);
     });
 
-    // Handle mouse click event
     function onPointerClick(event) {
         event.preventDefault();
 
@@ -256,12 +253,12 @@ window.onload = function () {
             // Check if the tapped/clicked object is a marker
             if (object.userData.isMarker) {
                 const annotation = object.userData.annotation;
-                const title = object.userData.title; // Get the title
-                const targetpos = object.userData.targetpos; // Get the target position
+                const title = object.userData.title;
+                const targetpos = object.userData.targetpos;
                 const cameraTargetPosition = object.userData.cameraTargetPosition
                 const number = object.userData.number
 
-                focusOnMarker(targetpos, cameraTargetPosition, x, y, title, annotation, number); // Zoom to the target position
+                focusOnMarker(targetpos, cameraTargetPosition, x, y, title, annotation, number);
             }
         }
     }
@@ -283,7 +280,6 @@ window.onload = function () {
             })
             .start();
     
-        // Animate the controls target to focus on the targetpos
         new TWEEN.Tween(controls.target)
             .to(targetpos, 1000)
             .easing(TWEEN.Easing.Quadratic.Out)
@@ -291,7 +287,6 @@ window.onload = function () {
     }
     
     function zoomOut() {
-        // Animate the camera and controls target back to their original positions
         controls.minDistance = 2;
         controls.maxDistance = 20;
 
@@ -310,20 +305,19 @@ window.onload = function () {
         const popup = document.createElement("div");
         popup.className = "annotation-popup";
         popup.style.position = "absolute";
-        popup.style.background = "linear-gradient(135deg, rgba(74, 20, 140, 0.9), rgba(123, 31, 162, 0.9))"; // Added transparency
+        popup.style.background = "linear-gradient(135deg, rgba(74, 20, 140, 0.9), rgba(123, 31, 162, 0.9))";
         popup.style.padding = "15px";
         popup.style.border = "1px solid #ccc";
         popup.style.borderRadius = "10px";
         popup.style.boxShadow = "0 4px 15px rgba(0, 0, 0, 0.3)";
         popup.style.fontFamily = "Arial, sans-serif";
         popup.style.color = "#fff";
-        popup.style.opacity = "0"; // For the fade-in transition
+        popup.style.opacity = "0";
         popup.style.transition = "opacity 0.2s ease";
         popup.style.zIndex = "9999";
-        popup.style.maxWidth = "300px"; // Increased width slightly
+        popup.style.maxWidth = "300px";
         popup.style.wordWrap = "break-word";
 
-        // Add title
         const titleElement = document.createElement("div");
         titleElement.innerText = title;
         titleElement.style.fontSize = "18px";
@@ -332,45 +326,42 @@ window.onload = function () {
         titleElement.style.marginBottom = "10px";
         popup.appendChild(titleElement);
 
-        // Convert annotation text into bullet points
         const annotationList = document.createElement("ul");
-        annotationList.style.paddingLeft = "20px"; // Indent for bullet points
+        annotationList.style.paddingLeft = "20px";
         annotationList.style.fontSize = "14px";
         annotationList.style.textAlign = "left";
 
-        annotation.split("\n").forEach(point => {
+        annotation.replace(/\\n/g, '\n').split("\n").forEach(point => {
             const listItem = document.createElement("li");
-            listItem.innerHTML = point.replace("• ", "").replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>"); // Remove existing bullet point symbol
+            listItem.innerHTML = point.replace("• ", "").replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
             listItem.style.marginBottom = "8px";
             annotationList.appendChild(listItem);
         });
 
         popup.appendChild(annotationList);
     
-        // Close button
         const closeButton = document.createElement("button");
         closeButton.innerText = "Close";
         closeButton.style.display = "block";
         closeButton.style.margin = "15px auto 0";
         closeButton.style.padding = "5px 10px";
-        closeButton.style.background = "transparent";  // Transparent background initially
-        closeButton.style.color = "#fff";  // White text
-        closeButton.style.border = "3px solid #fff";  // White border
+        closeButton.style.background = "transparent";
+        closeButton.style.color = "#fff";
+        closeButton.style.border = "3px solid #fff";
         closeButton.style.borderRadius = "8px";
         closeButton.style.cursor = "pointer";
         closeButton.style.fontSize = "16px";
         closeButton.style.fontWeight = "bold";
-        closeButton.style.transition = "background 0.3s ease, color 0.3s ease";  // Smooth transition
+        closeButton.style.transition = "background 0.3s ease, color 0.3s ease";
     
-        // Hover effect
         closeButton.addEventListener("mouseenter", () => {
-            closeButton.style.background = "#fff";  // White background on hover
-            closeButton.style.color = "#512da8";  // Purple text on hover (same as popup background)
+            closeButton.style.background = "#fff";
+            closeButton.style.color = "#512da8";
         });
     
         closeButton.addEventListener("mouseleave", () => {
-            closeButton.style.background = "transparent";  // Revert to transparent background
-            closeButton.style.color = "#fff";  // Revert to white text
+            closeButton.style.background = "transparent";
+            closeButton.style.color = "#fff";
         });
     
         closeButton.addEventListener("click", (event) => {
@@ -395,7 +386,7 @@ window.onload = function () {
         const viewportWidth = window.innerWidth;
         const viewportHeight = window.innerHeight;
         const popupRect = popup.getBoundingClientRect();
-        const offset = 10; // Small offset to prevent overlapping with the marker
+        const offset = 10;
     
         // Ensure popup stays within viewport bounds
         let left = x + offset;
@@ -412,7 +403,6 @@ window.onload = function () {
                 
         if (window.innerWidth > 768) { 
             if (number === 4 || number === 5) {
-                // Place on the right side, leaving a margin
                 const rightMargin = 200;
                 popup.style.left = `${viewportWidth - popupRect.width - rightMargin}px`;
                 popup.style.top = `${(viewportHeight - popupRect.height) / 2}px`; // vertically center
@@ -421,7 +411,7 @@ window.onload = function () {
                 // Place on the left side with a margin
                 const leftMargin = 200;
                 popup.style.left = `${leftMargin}px`;
-                popup.style.top = `${(viewportHeight - popupRect.height) / 2}px`; // vertically center
+                popup.style.top = `${(viewportHeight - popupRect.height) / 2}px`;
             } 
             else {
                 popup.style.left = `${left}px`;
@@ -434,7 +424,6 @@ window.onload = function () {
             popup.style.left = `${left}px`;
             popup.style.top = `${viewportHeight - popupHeight - smallMargin}px`;
         }
-        // Fade in effect
         setTimeout(() => {
             popup.style.opacity = "1";
         }, 10);

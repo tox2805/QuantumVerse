@@ -46,6 +46,7 @@ export function showInstructionsPopup(controls, markersClickable, toolbarNotCrea
     const exitText = isTouchDevice ? "Tap" : "Click";
 
     const steps = [
+        'Displayed here is a quantum computer based on IBM\'s superconducting architecture.',
         `View annotations by ${interactText} on markers.`,
         `Rotate the model by ${rotateText}.`,
         `Zoom in and out ${zoomText}.`,
@@ -56,6 +57,9 @@ export function showInstructionsPopup(controls, markersClickable, toolbarNotCrea
         const li = document.createElement("li");
         li.innerText = step;
         li.style.marginBottom = "8px";
+        li.style.listStylePosition = "outside";
+        li.style.paddingLeft = "20px";
+        li.style.textIndent = "-20px";
         popup.appendChild(li);
     });
 
@@ -67,24 +71,24 @@ export function showInstructionsPopup(controls, markersClickable, toolbarNotCrea
     closeButton.style.display = "block";
     closeButton.style.margin = "20px auto 0";
     closeButton.style.padding = "10px 20px";
-    closeButton.style.background = "transparent";  // Transparent background initially
-    closeButton.style.color = "#fff";  // White text
-    closeButton.style.border = "3px solid #fff";  // White border
+    closeButton.style.background = "transparent";
+    closeButton.style.color = "#fff";
+    closeButton.style.border = "3px solid #fff";
     closeButton.style.borderRadius = "8px";
     closeButton.style.cursor = "pointer";
     closeButton.style.fontSize = "16px";
     closeButton.style.fontWeight = "bold";
-    closeButton.style.transition = "background 0.3s ease, color 0.3s ease";  // Smooth transition
+    closeButton.style.transition = "background 0.3s ease, color 0.3s ease";
 
     // Hover effect
     closeButton.addEventListener("mouseenter", () => {
-        closeButton.style.background = "#fff";  // White background on hover
-        closeButton.style.color = "#512da8";  // Purple text on hover (same as popup background)
+        closeButton.style.background = "#fff";
+        closeButton.style.color = "#512da8";
     });
 
     closeButton.addEventListener("mouseleave", () => {
-        closeButton.style.background = "transparent";  // Revert to transparent background
-        closeButton.style.color = "#fff";  // Revert to white text
+        closeButton.style.background = "transparent";
+        closeButton.style.color = "#fff";
     });
 
     let closeButtonClicked = false; // Flag to prevent enableControls from running
@@ -151,13 +155,12 @@ function createToolBar(controls) {
     toolbarWrapper.style.alignItems = "flex-start";
     toolbarWrapper.style.gap = "10px";
 
-    // Create the title element (aligned above the buttons)
     const title = document.createElement("div");
     title.innerText = "IBM Superconducting Quantum Computer";
     title.style.fontSize = "1rem";
     title.style.fontWeight = "600";
     title.style.color = "white";
-    title.style.background = "#3e2280";
+    title.style.background = "#25144d";
     title.style.padding = "6px 12px";
     title.style.borderRadius = "8px";
 
@@ -200,28 +203,66 @@ function createToolBar(controls) {
         return button;
     };
 
-    // Help button
     const helpButton = createButton("?", () => {
         showInstructionsPopup(controls, true, false);
     });
 
-    // Next section button
     const exploreButton = createButton("Go To Quantum Processor", () => {
         window.location.href = "/quantumprocessor";
     });
 
-    // Add buttons to the toolbar row
+    const quizbutton = createButton("Quiz", () => {
+        window.location.href = "/quiz";
+    });
+
     toolbar.appendChild(helpButton);
     toolbar.appendChild(exploreButton);
+    toolbar.appendChild(quizbutton);
 
-    // Add the title and toolbar to the wrapper
+
     if (window.innerWidth >= 768) {
         toolbarWrapper.appendChild(title);
     }
     toolbarWrapper.appendChild(toolbar);
 
-    // Add everything to the document
     document.body.appendChild(toolbarWrapper);
+}
+
+export function backToFullModelBtn(){
+    const button = document.createElement("button");
+    const text = "← Back To Full Model";
+    button.innerText = text;
+    button.style.position = "fixed";
+    button.style.top = "20px";
+    button.style.left = "20px";
+    button.style.background = "#512da8";
+    button.style.color = "#fff";
+    button.style.border = "none";
+    button.style.borderRadius = text === "?" ? "20%" : "8px";
+    button.style.cursor = "pointer";
+    button.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.3)";
+    button.style.transition = "background 0.3s ease";
+
+    button.style.padding = text === "?" ? "10px 20px" : "12px 20px";
+    button.style.fontSize = "16px";
+
+
+    button.addEventListener("mouseover", () => {
+        button.style.background = "#673ab7";
+    });
+
+    button.addEventListener("mouseout", () => {
+        button.style.background = "#512da8";
+    });
+
+    button.addEventListener("click", () => {
+        window.location.href = "/quantumar";
+    });
+    button.addEventListener("touchstart", () => {
+        window.location.href = "/quantumar";
+    });
+
+    return button;
 }
 
 export function finalInstructions() {
@@ -247,13 +288,11 @@ export function finalInstructions() {
 
     if (window.innerWidth > 768) {
         popup.style.width = "300px";
-        //popup.style.height = "300px";
         popup.style.left = "5%";
         popup.style.top = "50%";
         popup.style.transform = "translateY(-50%)";
     } else {
         popup.style.width = "80%";
-        //popup.style.height = "120px";
         popup.style.left = "50%";
         popup.style.bottom = "20px";
         popup.style.transform = "translateX(-50%)";
@@ -274,7 +313,6 @@ export function finalInstructions() {
     message.style.marginBottom = "15px";
     popup.appendChild(message);
 
-    // Restart Button
     const restartButton = document.createElement("button");
     restartButton.innerText = "Restart";
     restartButton.style.display = "block";
@@ -291,7 +329,6 @@ export function finalInstructions() {
     });
     popup.appendChild(restartButton);
 
-    // Back to Full Model Button
     const backButton = document.createElement("button");
     backButton.innerText = "Back to full computer model";
     backButton.style.display = "block";
@@ -304,7 +341,7 @@ export function finalInstructions() {
     backButton.style.cursor = "pointer";
     backButton.style.fontSize = "14px";
     backButton.addEventListener("click", () => {
-        window.location.href = "/quantumar"; // Redirects to the full quantum computer model page
+        window.location.href = "/quantumar";
     });
     popup.appendChild(backButton);
 

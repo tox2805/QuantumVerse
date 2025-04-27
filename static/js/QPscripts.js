@@ -1,10 +1,9 @@
-import { finalInstructions } from "./popups.js";
+import { finalInstructions, backToFullModelBtn } from "./popups.js";
 import { createTextSprite } from "./textsprite.js";
 
 window.markersClickable = false; // Initially false, to disable clicking on markers
 
 window.onload = function () {
-    // Scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
         75,
@@ -43,6 +42,11 @@ window.onload = function () {
 
     let originalControlsTarget = new THREE.Vector3().copy(controls.target);
 
+    let laptopScreen = true;
+    if (window.innerWidth < 768) {
+        laptopScreen = false;
+    }
+
     // Load the model
     const loader = new THREE.GLTFLoader();
     loader.load(
@@ -62,7 +66,7 @@ window.onload = function () {
 
             const box = new THREE.Box3().setFromObject(model);
             let bottom = 0;
-            if (window.innerWidth > 768) {
+            if (laptopScreen) {
                 bottom = box.min.y + 1;
             } else{
                 bottom = box.min.y + 0.5;
@@ -85,11 +89,14 @@ window.onload = function () {
     );
     
     // Set inital camera position
-    if (window.innerWidth > 768) {
+    if (laptopScreen) {
         camera.position.set(2, 0.2, -3);
     } else{
         camera.position.set(3.5, 0, -2);
     }
+
+    let originalCameraPosition = new THREE.Vector3().copy(camera.position);
+
 
     addScaleIndicator(scene, 2, { x: 0, y: 0, z: -4.2 });
 
@@ -165,16 +172,17 @@ window.onload = function () {
         }
     ];
 
-    if (window.innerWidth > 768) {
+    // Modify the the camera pos for final position if on laptop screen for better viewing. Also add a back to full model button at top left
+    if (laptopScreen) {
         const entanglementStep = annotationSequence.find(a => a.title === "2: Entanglement");
         if (entanglementStep) {
             entanglementStep.nextCameraPosition = { x: 2, y: 0.2, z: -3 };
             entanglementStep.nextCameraTargetPosition = { x: 0, y: 0, z: -3 };
         }
+        document.body.appendChild(backToFullModelBtn());
     }
         
     function showPopupStep(stepIndex) {
-        // Remove any existing popups
         const existingPopup = document.querySelector(".annotation-popup");
         if (existingPopup) {
             existingPopup.remove();
@@ -183,14 +191,13 @@ window.onload = function () {
         const step = annotationSequence[stepIndex];
 
         if (stepIndex >= annotationSequence.length) {
-            finalInstructions(); // No more steps, end sequence
+            finalInstructions();
             return;
         }
     
         showPopupStepWithCamera(step, stepIndex);
-        // Show the popup first, but do NOT move the camera yet
+
         function showPopupStepWithCamera(step, stepIndex) {
-            // Show the popup first, but do NOT move the camera yet
             showPopup(step.title, step.annotation, stepIndex, step.linesArray, () => {
                 // Wait for the user to click "Next", then move the camera
                 moveCameraTo(step.nextCameraTargetPosition, step.nextCameraPosition).then(() => {
@@ -203,14 +210,12 @@ window.onload = function () {
 
     function moveCameraTo(targetpos, nextCameraPosition) {
         return new Promise((resolve) => {
-        // Animate the camera to the specific position
             new TWEEN.Tween(camera.position)
                 .to(nextCameraPosition, 1000)
                 .easing(TWEEN.Easing.Quadratic.Out)
                 .onComplete(resolve)
                 .start();
 
-            // Animate the controls target to focus on the targetpos
             new TWEEN.Tween(controls.target)
                 .to(targetpos, 1000)
                 .easing(TWEEN.Easing.Quadratic.Out)
@@ -240,15 +245,13 @@ window.onload = function () {
         popup.style.wordWrap = "break-word";
         popup.style.maxHeight = "80vh";
     
-        if (window.innerWidth > 768) {
+        if (laptopScreen) {
             popup.style.width = "300px";
-            //popup.style.height = "300px";
             popup.style.left = "5%";
             popup.style.top = "50%";
             popup.style.transform = "translateY(-50%)";
         } else {
             popup.style.width = "80%";
-            //popup.style.height = "120px";
             popup.style.left = "50%";
             popup.style.bottom = "20px";
             popup.style.transform = "translateX(-50%)";
@@ -276,38 +279,17 @@ window.onload = function () {
     
         popup.appendChild(annotationList);
     
-        const nextButton = document.createElement("button");
+        const nextButton = createButton();
         nextButton.innerText = stepIndex === annotationSequence.length - 1 ? "Finish" : "Next";
-        nextButton.style.display = "block";
-        nextButton.style.margin = "15px auto 0";
-        nextButton.style.padding = "5px 10px";
-        nextButton.style.background = "transparent";  // Transparent background initially
-        nextButton.style.color = "#fff";  // White text
-        nextButton.style.border = "3px solid #fff";  // White border
-        nextButton.style.borderRadius = "8px";
-        nextButton.style.cursor = "pointer";
-        nextButton.style.fontSize = "16px";
-        nextButton.style.fontWeight = "bold";
-        nextButton.style.transition = "background 0.3s ease, color 0.3s ease";  // Smooth transition
-    
-        // Hover effect
-        nextButton.addEventListener("mouseenter", () => {
-            nextButton.style.background = "#fff";  // White background on hover
-            nextButton.style.color = "#512da8";  // Purple text on hover (same as popup background)
-        });
-    
-        nextButton.addEventListener("mouseleave", () => {
-            nextButton.style.background = "transparent";  // Revert to transparent background
-            nextButton.style.color = "#fff";  // Revert to white text
-        });
 
+        const backButton = createButton();
+        backButton.innerText = "Back"
 
         let qubitTextSprites = null
         let logicGateTextSprites = null
         let entanglementTextSprites = null
 
 
-        //have if conditions here which call diff functions for handling qubits, gates etc
         if (title === "1: Qubits"){
             qubitTextSprites = qubitsMarkers();
         }
@@ -330,27 +312,106 @@ window.onload = function () {
             
             if (qubitTextSprites) {
                 qubitTextSprites.forEach(qsprite => scene.remove(qsprite));
-                qubitTextSprites.length = 0; // Clear the array
+                qubitTextSprites.length = 0;
             }
             if (logicGateTextSprites) {
                 logicGateTextSprites.forEach(lsprite => scene.remove(lsprite));
-                logicGateTextSprites.length = 0; // Clear the array
+                logicGateTextSprites.length = 0;
             }
             if (entanglementTextSprites) {
                 entanglementTextSprites.forEach(esprite => scene.remove(esprite));
-                entanglementTextSprites.length = 0; // Clear the array
+                entanglementTextSprites.length = 0;
             }
         
-            if (onNext) onNext(); // Move the camera and show the next popup
+            if (onNext) onNext();
+        });
+
+        backButton.addEventListener("click", () => {
+            popup.remove();
+            
+            if (qubitTextSprites) {
+                qubitTextSprites.forEach(qsprite => scene.remove(qsprite));
+                qubitTextSprites.length = 0;
+            }
+            if (logicGateTextSprites) {
+                logicGateTextSprites.forEach(lsprite => scene.remove(lsprite));
+                logicGateTextSprites.length = 0;
+            }
+            if (entanglementTextSprites) {
+                entanglementTextSprites.forEach(esprite => scene.remove(esprite));
+                entanglementTextSprites.length = 0;
+            }
+            
+            let previousStep = null;
+            let CameraTargetPosition = null;
+            let CameraPosition = null;
+            if (stepIndex > 1) {
+                previousStep = annotationSequence[stepIndex - 2];
+                CameraTargetPosition = previousStep.nextCameraTargetPosition;
+                CameraPosition = previousStep.nextCameraPosition;
+            } else {
+                CameraTargetPosition = originalControlsTarget;
+                CameraPosition = originalCameraPosition;
+            }
+            // Move camera to the previous marker's position
+            moveCameraTo(CameraTargetPosition, CameraPosition).then(() => {
+                // Show the previous popup
+                showPopupStep(stepIndex - 1);
+            });
         });
     
-        popup.appendChild(nextButton);
+        const buttonContainer = document.createElement("div");
+        buttonContainer.style.display = "flex";
+        buttonContainer.style.justifyContent = "center";
+        buttonContainer.style.alignItems = "center"; // vertical alignment if needed
+        buttonContainer.style.gap = "15px"; // space between back/next
+        buttonContainer.style.marginTop = "20px";
+        
+        // Set button margins and flex behaviour
+        backButton.style.margin = "0"; 
+        nextButton.style.margin = "0";
+        backButton.style.flex = "0 0 auto";
+        nextButton.style.flex = "0 0 auto";
+
+        if (stepIndex > 0) {
+            buttonContainer.appendChild(backButton);
+        }
+        buttonContainer.appendChild(nextButton);
+
+        popup.appendChild(buttonContainer);
 
         document.body.appendChild(popup);
     
         setTimeout(() => {
             popup.style.opacity = "1";
         }, 10);
+    }
+
+    function createButton() {
+        const button = document.createElement("button");
+        button.style.display = "block";
+        button.style.margin = "15px auto 0";
+        button.style.padding = "5px 10px";
+        button.style.background = "transparent";
+        button.style.color = "#fff";
+        button.style.border = "3px solid #fff";
+        button.style.borderRadius = "8px";
+        button.style.cursor = "pointer";
+        button.style.fontSize = "16px";
+        button.style.fontWeight = "bold";
+        button.style.transition = "background 0.3s ease, color 0.3s ease";
+
+        button.addEventListener("mouseenter", () => {
+            button.style.background = "#fff";
+            button.style.color = "#512da8";
+        });
+    
+        button.addEventListener("mouseleave", () => {
+            button.style.background = "transparent";
+            button.style.color = "#fff";
+        });
+
+        return button;
     }
 
     function qubitsMarkers() {
@@ -362,7 +423,6 @@ window.onload = function () {
             scene.add(textSprite);
         }
     
-        // You will set their positions manually like this:
         textSprites[0].position.copy(new THREE.Vector3(0.09, 0.875, -2.13));  //left top
         textSprites[1].position.copy(new THREE.Vector3(0.09, 0.854, -2.217));  //right top
         textSprites[2].position.copy(new THREE.Vector3(0.09, 0.835, -2.172));  //middle
@@ -407,7 +467,6 @@ window.onload = function () {
     function addScaleIndicator(scene, chipHeight, position) {
         const material = new THREE.LineBasicMaterial({ color: 0xffffff });
     
-        // Define the vertical line
         const verticalPoints = [
             new THREE.Vector3(position.x, position.y - chipHeight / 2, position.z),
             new THREE.Vector3(position.x, position.y + chipHeight / 2, position.z)
@@ -431,7 +490,6 @@ window.onload = function () {
         const bottomGeometry = new THREE.BufferGeometry().setFromPoints(bottomPoints);
         const bottomLine = new THREE.Line(bottomGeometry, material);
     
-        // Create a group for all scale elements
         const scaleGroup = new THREE.Group();
         scaleGroup.add(verticalLine, topLine, bottomLine);
     

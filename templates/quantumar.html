@@ -24,5 +24,10 @@
 
 {% block content %}
     <canvas id="scene"></canvas>
+
+    <script>
+        const annotationsData = {{ annotations | tojson }};
+    </script>
+
     <script type="module" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 {% endblock %}

@@ -1,28 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<a href="{{ url_for('reset_quiz') }}" class="reset-button">⟵ Reset Quiz</a>
 
 <div class="container">
+    <a href="{{ url_for('quantumar') }}" class="back-button">← Back To Tool</a>
+    <a href="{{ url_for('reset_quiz') }}" class="reset-button">Reset Quiz</a>
+
     <div class="title-quiz">
         <h1>Quiz</h1>
     </div>
-
-    <form method="POST">
-        <div class="question-block">
-            <h3>Q{{ index }} of {{ total }}: {{ question.question }}</h3>
-            {% set options = question.choices.split(',') %}
-            <div class="radio-group">
-                {% for choice in options %}
-                    <label class="radio-option">
-                        <input type="radio" id="q_{{ loop.index }}" name="answer" value="{{ choice.strip() }}"
-                            {% if selected_answer == choice.strip() %}checked{% endif %} required>
-                        <span class="custom-radio"></span>
-                        {{ choice.strip() }}
-                    </label>
-                {% endfor %}
-            </div>
-        </div>
+    <div class="question-block">
+        <form method="POST">
+                <h3>Q{{ index }}) {{ question.question }}</h3>
+                {% set options = question.choices.split(',') %}
+                <div class="radio-group">
+                    {% for choice in options %}
+                        <label class="radio-option">
+                            <input type="radio" id="q_{{ loop.index }}" name="answer" value="{{ choice.strip() }}"
+                                {% if selected_answer == choice.strip() %}checked{% endif %} required>
+                            <span class="custom-radio"></span>
+                            {{ choice.strip() }}
+                        </label>
+                    {% endfor %}
+                </div>
+    </div>
 
         <div class="navigation-buttons">
             {% if not is_first %}

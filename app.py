@@ -31,6 +31,10 @@ class Questions(db.Model):
 #     db.session.commit()
 #     return "Question added!"
 
+class Annotations(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    annotation = db.Column(db.Text, nullable=False)
+
 # Home page route
 @app.route('/')
 def home():
@@ -43,7 +47,14 @@ def quantum_level():
 
 @app.route('/quantumar')
 def quantumar():
-    return render_template('quantumar.html')
+    annotations = Annotations.query.all()
+    
+    annotations_data = [
+        {'id': annotation.id, 'annotation': annotation.annotation}
+        for annotation in annotations
+    ]
+
+    return render_template('quantumar.html', annotations=annotations_data)
 
 @app.route('/quantumprocessor')
 def QProcessorAR():

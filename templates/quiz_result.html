@@ -2,6 +2,9 @@
 
 {% block content %}
 <div class="container-results">
+    <a href="{{ url_for('quantumar') }}" class="back-button">← Back To Tool</a>
+    <a href="{{ url_for('reset_quiz') }}" class="reset-button">Reset Quiz</a>
+
     <h1>Results</h1>
     <p>You scored {{ score }} out of {{ total }}.</p>
 

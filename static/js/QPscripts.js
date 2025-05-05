@@ -280,10 +280,10 @@ window.onload = function () {
         popup.appendChild(annotationList);
     
         const nextButton = createButton();
-        nextButton.innerText = stepIndex === annotationSequence.length - 1 ? "Finish" : "Next";
+        nextButton.innerText = stepIndex === annotationSequence.length - 1 ? "Finish" : "→";
 
         const backButton = createButton();
-        backButton.innerText = "Back"
+        backButton.innerText = "←"
 
         let qubitTextSprites = null
         let logicGateTextSprites = null

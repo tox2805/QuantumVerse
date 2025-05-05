@@ -362,42 +362,35 @@ window.onload = function () {
             zoomOut();
         }, { passive: false });
 
-        nextButton.addEventListener("click", () => {
-            let n = number
-            if (n === 7){   // If final marker, go back to first one
-                n = 0
+        function handleNavigation(direction) {
+            let n = number;
+        
+            if (direction === 'next') {
+                n = (n === 7) ? 0 : n;
+                const nextMarker = markers.find(marker => marker.number === n + 1);
+                if (nextMarker) focusOnMarkerFrom(nextMarker);
+            } else if (direction === 'prev') {
+                n = (n === 1) ? 8 : n;
+                const prevMarker = markers.find(marker => marker.number === n - 1);
+                if (prevMarker) focusOnMarkerFrom(prevMarker);
             }
-            const nextMarker = markers.find(marker => marker.number === n + 1);
-            if (nextMarker) {
-                focusOnMarker(
-                    nextMarker.targetpos,
-                    nextMarker.cameraTargetPosition,
-                    1000,
-                    266,
-                    nextMarker.title,
-                    nextMarker.annotation,
-                    nextMarker.number
-                );
-            }
-        });
-
-        prevButton.addEventListener("click", () => {
-            let n = number
-            if (n === 1){   // If first marker, go back to last one
-                n = 8
-            }
-            const nextMarker = markers.find(marker => marker.number === n - 1);
-            if (nextMarker) {
-                focusOnMarker(
-                    nextMarker.targetpos,
-                    nextMarker.cameraTargetPosition,
-                    1000,
-                    266,
-                    nextMarker.title,
-                    nextMarker.annotation,
-                    nextMarker.number
-                );
-            }
+        }
+        
+        function focusOnMarkerFrom(marker) {
+            focusOnMarker(
+                marker.targetpos,
+                marker.cameraTargetPosition,
+                1000,
+                266,
+                marker.title,
+                marker.annotation,
+                marker.number
+            );
+        }
+        
+        ['click', 'touchstart'].forEach(event => {
+            nextButton.addEventListener(event, () => handleNavigation('next'));
+            prevButton.addEventListener(event, () => handleNavigation('prev'));
         });
 
         const buttonContainer = document.createElement("div");

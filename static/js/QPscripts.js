@@ -363,8 +363,8 @@ window.onload = function () {
         const buttonContainer = document.createElement("div");
         buttonContainer.style.display = "flex";
         buttonContainer.style.justifyContent = "center";
-        buttonContainer.style.alignItems = "center"; // vertical alignment if needed
-        buttonContainer.style.gap = "15px"; // space between back/next
+        buttonContainer.style.alignItems = "center";
+        buttonContainer.style.gap = "15px";
         buttonContainer.style.marginTop = "20px";
         
         // Set button margins and flex behaviour

@@ -19,7 +19,6 @@ def get_iam_token(api_key):
     
     if response.status_code == 200:
         access_token = response.json()['access_token']
-        print(access_token)
         return access_token
     else:
         raise Exception(f"Failed to get IAM token: {response.status_code} - {response.text}")

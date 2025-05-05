@@ -121,7 +121,7 @@ window.onload = function () {
             annotation: annotationsData[0].annotation,
             number: 1, 
             targetpos: new THREE.Vector3(0.1, -8.9, -2.8),
-            title: "Quantum Processor",
+            title: "1) Quantum Processor",
             cameraTargetPosition: new THREE.Vector3(-5, -9, -2.8)
         },
         { 
@@ -129,7 +129,7 @@ window.onload = function () {
             annotation: annotationsData[1].annotation,
             number: 2, 
             targetpos: new THREE.Vector3(1.5, -9.5, -4),
-            title: "Quantum Amplifiers",
+            title: "2) Quantum Amplifiers",
             cameraTargetPosition: new THREE.Vector3(5.76, -8.55, -6.4)
         },
         { 
@@ -137,7 +137,7 @@ window.onload = function () {
             annotation: annotationsData[4].annotation,
             number: 5, 
             targetpos: new THREE.Vector3(-1, -1, -5),
-            title: "Input Microwave Lines",
+            title: "5) Input Microwave Lines",
             cameraTargetPosition: new THREE.Vector3(-3.26, -0.25, -9.4)
         },
         { 
@@ -145,7 +145,7 @@ window.onload = function () {
             annotation: annotationsData[2].annotation,
             number: 3, 
             targetpos: new THREE.Vector3(3, 0, -3),
-            title: "Qubit Signal Amplifiers",
+            title: "3) Qubit Signal Amplifiers",
             cameraTargetPosition: new THREE.Vector3(7.4, 0.4, -0.65)
         },
         { 
@@ -153,7 +153,7 @@ window.onload = function () {
             annotation: annotationsData[3].annotation,
             number: 4, 
             targetpos: new THREE.Vector3(1, -3.5, -1),
-            title: "Superconducting Coaxial Lines",
+            title: "4) Superconducting Coaxial Lines",
             cameraTargetPosition: new THREE.Vector3(1.08, -2.46, 3.9)
         },
         { 
@@ -161,7 +161,7 @@ window.onload = function () {
             annotation: annotationsData[5].annotation,
             number: 6, 
             targetpos: new THREE.Vector3(0, -8, -3),
-            title: "Mixing Chamber",
+            title: "6) Mixing Chamber",
             cameraTargetPosition: new THREE.Vector3(-3.49, -6, -6)
         },
         { 
@@ -169,7 +169,7 @@ window.onload = function () {
             annotation: annotationsData[6].annotation,
             number: 7, 
             targetpos: new THREE.Vector3(0, 1, -3),
-            title: "External Components",
+            title: "7) External Components",
             cameraTargetPosition: new THREE.Vector3(0, 2, -8)
         }
     ];
@@ -286,6 +286,10 @@ window.onload = function () {
     }
     
     function zoomOut() {
+        const existingPopup = document.querySelector(".annotation-popup");
+        if (existingPopup) {
+            existingPopup.remove();
+        }
         controls.minDistance = 2;
         controls.maxDistance = 20;
 
@@ -339,29 +343,9 @@ window.onload = function () {
 
         popup.appendChild(annotationList);
     
-        const closeButton = document.createElement("button");
-        closeButton.innerText = "Close";
-        closeButton.style.display = "block";
-        closeButton.style.margin = "15px auto 0";
-        closeButton.style.padding = "5px 10px";
-        closeButton.style.background = "transparent";
-        closeButton.style.color = "#fff";
-        closeButton.style.border = "3px solid #fff";
-        closeButton.style.borderRadius = "8px";
-        closeButton.style.cursor = "pointer";
-        closeButton.style.fontSize = "16px";
-        closeButton.style.fontWeight = "bold";
-        closeButton.style.transition = "background 0.3s ease, color 0.3s ease";
-    
-        closeButton.addEventListener("mouseenter", () => {
-            closeButton.style.background = "#fff";
-            closeButton.style.color = "#512da8";
-        });
-    
-        closeButton.addEventListener("mouseleave", () => {
-            closeButton.style.background = "transparent";
-            closeButton.style.color = "#fff";
-        });
+        const closeButton = createButton("Close");
+        const nextButton = createButton("→");
+        const prevButton = createButton("←");
     
         closeButton.addEventListener("click", (event) => {
             event.stopPropagation();
@@ -377,8 +361,65 @@ window.onload = function () {
             popup.remove();
             zoomOut();
         }, { passive: false });
+
+        nextButton.addEventListener("click", () => {
+            let n = number
+            if (n === 7){   // If final marker, go back to first one
+                n = 0
+            }
+            const nextMarker = markers.find(marker => marker.number === n + 1);
+            if (nextMarker) {
+                focusOnMarker(
+                    nextMarker.targetpos,
+                    nextMarker.cameraTargetPosition,
+                    1000,
+                    266,
+                    nextMarker.title,
+                    nextMarker.annotation,
+                    nextMarker.number
+                );
+            }
+        });
+
+        prevButton.addEventListener("click", () => {
+            let n = number
+            if (n === 1){   // If first marker, go back to last one
+                n = 8
+            }
+            const nextMarker = markers.find(marker => marker.number === n - 1);
+            if (nextMarker) {
+                focusOnMarker(
+                    nextMarker.targetpos,
+                    nextMarker.cameraTargetPosition,
+                    1000,
+                    266,
+                    nextMarker.title,
+                    nextMarker.annotation,
+                    nextMarker.number
+                );
+            }
+        });
+
+        const buttonContainer = document.createElement("div");
+        buttonContainer.style.display = "flex";
+        buttonContainer.style.justifyContent = "center";
+        buttonContainer.style.alignItems = "center";
+        buttonContainer.style.gap = "15px";
+        buttonContainer.style.marginTop = "20px";
+
+        closeButton.style.margin = "0"; 
+        nextButton.style.margin = "0";
+        prevButton.style.margin = "0";
+        closeButton.style.flex = "0 0 auto";
+        nextButton.style.flex = "0 0 auto";
+        prevButton.style.flex = "0 0 auto";
+
+        buttonContainer.appendChild(prevButton);
+        buttonContainer.appendChild(closeButton);
+        buttonContainer.appendChild(nextButton);
+
+        popup.appendChild(buttonContainer);
     
-        popup.appendChild(closeButton);
         document.body.appendChild(popup);
     
         // Get viewport dimensions
@@ -386,11 +427,13 @@ window.onload = function () {
         const viewportHeight = window.innerHeight;
         const popupRect = popup.getBoundingClientRect();
         const offset = 10;
-    
+        
         // Ensure popup stays within viewport bounds
         let left = x + offset;
         let top = y + offset;
-    
+        console.log(x);
+        console.log(y);
+
         if (left + popupRect.width > viewportWidth) {
             left = viewportWidth - popupRect.width - offset;
         }
@@ -426,6 +469,33 @@ window.onload = function () {
         setTimeout(() => {
             popup.style.opacity = "1";
         }, 10);
+    }
+
+    function createButton(text){
+        const button = document.createElement("button");
+        button.innerText = text;
+        button.style.display = "block";
+        button.style.margin = "15px auto 0";
+        button.style.padding = "5px 10px";
+        button.style.background = "transparent";
+        button.style.color = "#fff";
+        button.style.border = "3px solid #fff";
+        button.style.borderRadius = "8px";
+        button.style.cursor = "pointer";
+        button.style.fontSize = "16px";
+        button.style.fontWeight = "bold";
+        button.style.transition = "background 0.3s ease, color 0.3s ease";
+    
+        button.addEventListener("mouseenter", () => {
+            button.style.background = "#fff";
+            button.style.color = "#512da8";
+        });
+    
+        button.addEventListener("mouseleave", () => {
+            button.style.background = "transparent";
+            button.style.color = "#fff";
+        });
+        return button
     }
 
     window.addEventListener("click", onPointerClick, false);
